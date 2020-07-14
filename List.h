@@ -92,7 +92,7 @@ void List<Type>:: insertIn(Type key, int pos) {
         newNode->setNext(previous->getNext());
         previous->setNext(newNode);
     }
-    elements++;=
+    elements++;
 }
 
 template < typename Type >
