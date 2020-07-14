@@ -56,7 +56,7 @@ int List<Type>:: getElements() {
 template < typename Type >
 Node<Type>* List<Type>:: getNode(int pos) {
     Node<Type> *aux = first;
-    int i = 1;
+    int i = 0;
     while (i < pos) {
         aux = aux->getNext();
         i++;
@@ -92,8 +92,7 @@ void List<Type>:: insertIn(Type key, int pos) {
         newNode->setNext(previous->getNext());
         previous->setNext(newNode);
     }
-    elements++;
-    cout << "\t" << getData(pos) << " was added in pos " << pos << "\n";
+    elements++;=
 }
 
 template < typename Type >
@@ -109,7 +108,6 @@ void List<Type>:: remove(int pos) {
         erase = previous->getNext();
         previous->setNext(erase->getNext());
     }
-    cout << "\t" << erase->getData() <<  " was deleted from " << pos << "\n";
     delete erase;
     elements--;
 }
@@ -117,7 +115,7 @@ void List<Type>:: remove(int pos) {
 template < typename Type >
 void List<Type>:: printData() {
     if (!empty()) {
-        for (int i = 1; i < elements; i++) {
+        for (int i = 0; i < elements; i++) {
             getNode(i)->mostrarType();
         }
     }
@@ -126,7 +124,7 @@ void List<Type>:: printData() {
 template < typename Type >
 void List<Type>:: listElements() {
     cout << "\n";
-    for (int i = 1; i <= elements; i++) {
+    for (int i = 0; i <= elements; i++) {
         cout << "\t" << i << ". " << getData(i) << "\n";
     }
     cout << "\n";
