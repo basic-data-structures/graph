@@ -3,8 +3,6 @@
 
 #include "Vertex.h"
 
-template <class Type> class Vertex;
-
 template <typename Type>
 class Edge {
 
@@ -14,7 +12,7 @@ class Edge {
         unsigned cost;
 
     public:
-        Edge(Vertex<Type>* begin, Vertex<Type>* end, unsigned cost);
+        Edge(Vertex<Type>* begin, Vertex<Type>* end, unsigned cost = 0);
         ~Edge();
         void setBeginVertex(Vertex<Type>* begin);
         void setEndVertex(Vertex<Type>* end);
