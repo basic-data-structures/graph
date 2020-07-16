@@ -11,7 +11,6 @@ class Vertex {
         bool visited;
 
     public:
-        Vertex();
         Vertex(Type key);
         Type getKey();
         bool getVisited();
@@ -23,6 +22,7 @@ class Vertex {
 template <typename Type>
 Vertex<Type>:: Vertex(Type key) {
     this->key = key;
+    this->visited = false;
 }
 
 /////////////////////////////////////////////
