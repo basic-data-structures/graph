@@ -9,8 +9,8 @@ class Graph {
 
     private:
         List<Edge<Type>*> edges;
-        List<Vertex<Type>*> lVertices;
-        int vertices;
+        List<Vertex<Type>*> vertices;
+        int elements;
 
     public:
         //  PRE: -
@@ -21,6 +21,8 @@ class Graph {
         // POST: Creates a graph with an edge connecting begin and end
         Graph(Type begin, Type end);
 
+        //  PRE: -
+        // POST: If the key exists in the graph, it returns the vertex. Otherwise it returns NULL
         Vertex<Type>* getVertex(Type key);
 
         //  PRE: The edge connecting begin and end must not exist yet
@@ -39,25 +41,26 @@ class Graph {
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
 template<typename Type>
 Graph<Type>:: Graph() {
-    vertices = 0;
+    elements = 0;
 }
 
 template<typename Type>
 Graph<Type>:: Graph(Type begin, Type end) {
     Vertex<Type>* beg = new Vertex<Type>(begin);
     Vertex<Type>* en = new Vertex<Type>(end);
-    lVertices.insertAtEnd(beg);
-    lVertices.insertAtEnd(en);
+    vertices.insertAtEnd(beg);
+    vertices.insertAtEnd(en);
     Edge<Type>* edge = new Edge<Type>(beg, en);
     edges.insertAtEnd(edge);
 }
 
 template<typename Type>
 Vertex<Type>* Graph<Type>:: getVertex(Type key) {
-    for (int i = 0; i < lVertices.getElements(); ++i) {
-        if (lVertices.getData(i)->getKey() == key)
-            return lVertices.getData(i);
+    for (int i = 0; i < vertices.getElements(); ++i) {
+        if (vertices.getData(i)->getKey() == key)
+            return vertices.getData(i);
     }
+    return 0;
 }
 
 template<typename Type>
@@ -68,24 +71,24 @@ void Graph<Type>:: insertEdge(Type begin, Type end) {
     }
     else if (!existsVertex(begin)) {
         Vertex<Type>* aux = new Vertex<Type>(begin);
-        lVertices.insertAtEnd(aux);
-        vertices += 1;
+        vertices.insertAtEnd(aux);
+        elements += 1;
         Edge<Type>* edge = new Edge<Type>(aux, getVertex(end));
         edges.insertAtEnd(edge);
     }
     else if (!existsVertex(end)) {
         Vertex<Type>* aux = new Vertex<Type>(end);
-        lVertices.insertAtEnd(aux);
-        vertices += 1;
+        vertices.insertAtEnd(aux);
+        elements += 1;
         Edge<Type>* edge = new Edge<Type>(getVertex(begin), aux);
         edges.insertAtEnd(edge);
     }
     else {
         Vertex<Type>* auxBeg = new Vertex<Type>(end);
         Vertex<Type>* auxEnd = new Vertex<Type>(end);
-        lVertices.insertAtEnd(auxBeg);
-        lVertices.insertAtEnd(auxEnd);
-        vertices += 2;
+        vertices.insertAtEnd(auxBeg);
+        vertices.insertAtEnd(auxEnd);
+        elements += 2;
         Edge<Type>* edge = new Edge<Type>(auxBeg, auxEnd);
         edges.insertAtEnd(edge);
     }
@@ -93,8 +96,8 @@ void Graph<Type>:: insertEdge(Type begin, Type end) {
 
 template<typename Type>
 bool Graph<Type>:: existsVertex(Type key) {
-    for (int i = 0; i < lVertices.getElements(); ++i) {
-        if (lVertices.getData(i)->getKey() == key) {
+    for (int i = 0; i < vertices.getElements(); ++i) {
+        if (vertices.getData(i)->getKey() == key) {
             return true;
         }
     }
