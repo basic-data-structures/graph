@@ -13,7 +13,6 @@ class Edge {
 
     public:
         Edge(Vertex<Type>* begin, Vertex<Type>* end, unsigned cost = 0);
-        ~Edge();
         void setBeginVertex(Vertex<Type>* begin);
         void setEndVertex(Vertex<Type>* end);
         void setBeginVertexData(Type data);
@@ -31,11 +30,6 @@ Edge<Type>:: Edge(Vertex<Type>* begin,Vertex<Type> *end, unsigned cost) {
     this->begin = begin;
     this->end = end;
     this->cost = cost;
-}
-
-template <typename Type>
-Edge<Type>:: ~Edge<Type>() {
-    //TODO
 }
 
 template <typename Type>
