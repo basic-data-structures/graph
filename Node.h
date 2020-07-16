@@ -15,6 +15,7 @@ class Node {
     public:
 
         Node(Type data);
+        ~Node();
 
         // Setters
         void setNext(Node* pNextOut);
@@ -32,6 +33,10 @@ template < typename Type >
 Node<Type>:: Node(Type data) {
     this->data = data;
     pNext = 0;
+}
+template < typename Type >
+Node<Type>:: ~Node<Type>() {
+    delete data;
 }
 
 template < typename Type >
