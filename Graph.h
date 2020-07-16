@@ -8,8 +8,9 @@ template <typename Type>
 class Graph {
 
     private:
-        Vertex<Type>* first;
-        int vertexes;
+        List<Edge<Type>*> edges;
+        List<Vertex<Type>*> lVertices;
+        int vertices;
 
     public:
         //  PRE: -
@@ -17,28 +18,14 @@ class Graph {
         Graph();
 
         //  PRE: -
-        // POST: Creates a graph with vertex and edge
-        Graph(Vertex<Type>* vertex, Edge<Type>* edge);
+        // POST: Creates a graph with an edge connecting begin and end
+        Graph(Type begin, Type end);
 
-        //  PRE: The graph exists
-        // POST: Free resources
-        ~Graph();
+        Vertex<Type>* getVertex(Type key);
 
-        //  PRE: The vertex must not exist yet
-        // POST: Inserts a new vertex
-        void insertVertex(Vertex<Type>* vertex);
-
-        //  PRE: The edge must not exist yet, there must be a begining and an ending vertex
-        // POST: Inserts a new edge
-        void insertEdge(Edge<Type>* edge);
-
-        //  PRE: -
-        // POST: Deletes vertex
-        void deleteVertex(Vertex<Type>* vertex);
-
-        //  PRE: -
-        // POST: Deletes edge
-        void deleteEdge(Edge<Type>* edge);
+        //  PRE: The edge connecting begin and end must not exist yet
+        // POST: Inserts a new edge from begin to end
+        void insertEdge(Type begin, Type end);
 
         //  PRE: -
         // POST: Returns true if a vertex with that key exists
@@ -46,14 +33,83 @@ class Graph {
 
         //  PRE: -
         // POST: Returns true if a edge from begin to end exists
-        bool existsEdge(Vertex<Type>* begin, Vertex<Type>* end);
-
-    private:
-        bool existsVertex(Vertex<Type>* vertex);
-        bool existsEdge(Edge<Type>* edge);
-
+        bool existsEdge(Type begin, Type end);
 };
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
+template<typename Type>
+Graph<Type>:: Graph() {
+    vertices = 0;
+}
+
+template<typename Type>
+Graph<Type>:: Graph(Type begin, Type end) {
+    Vertex<Type>* beg = new Vertex<Type>(begin);
+    Vertex<Type>* en = new Vertex<Type>(end);
+    lVertices.insertAtEnd(beg);
+    lVertices.insertAtEnd(en);
+    Edge<Type>* edge = new Edge<Type>(beg, en);
+    edges.insertAtEnd(edge);
+}
+
+template<typename Type>
+Vertex<Type>* Graph<Type>:: getVertex(Type key) {
+    for (int i = 0; i < lVertices.getElements(); ++i) {
+        if (lVertices.getData(i)->getKey() == key)
+            return lVertices.getData(i);
+    }
+}
+
+template<typename Type>
+void Graph<Type>:: insertEdge(Type begin, Type end) {
+    if (existsVertex(begin) && existsVertex(end)) {
+        Edge<Type>* edge = new Edge<Type>(getVertex(begin), getVertex(end));
+        edges.insertAtEnd(edge);
+    }
+    else if (!existsVertex(begin)) {
+        Vertex<Type>* aux = new Vertex<Type>(begin);
+        lVertices.insertAtEnd(aux);
+        vertices += 1;
+        Edge<Type>* edge = new Edge<Type>(aux, getVertex(end));
+        edges.insertAtEnd(edge);
+    }
+    else if (!existsVertex(end)) {
+        Vertex<Type>* aux = new Vertex<Type>(end);
+        lVertices.insertAtEnd(aux);
+        vertices += 1;
+        Edge<Type>* edge = new Edge<Type>(getVertex(begin), aux);
+        edges.insertAtEnd(edge);
+    }
+    else {
+        Vertex<Type>* auxBeg = new Vertex<Type>(end);
+        Vertex<Type>* auxEnd = new Vertex<Type>(end);
+        lVertices.insertAtEnd(auxBeg);
+        lVertices.insertAtEnd(auxEnd);
+        vertices += 2;
+        Edge<Type>* edge = new Edge<Type>(auxBeg, auxEnd);
+        edges.insertAtEnd(edge);
+    }
+}
+
+template<typename Type>
+bool Graph<Type>:: existsVertex(Type key) {
+    for (int i = 0; i < lVertices.getElements(); ++i) {
+        if (lVertices.getData(i)->getKey() == key) {
+            return true;
+        }
+    }
+    return false;
+}
+
+template<typename Type>
+bool Graph<Type>:: existsEdge(Type begin, Type end) {
+    for (int i = 0; i < edges.getElements(); ++i) {
+        Edge<Type>* aux = edges.getData(i);
+        if (aux->getBeginVertex()->getKey() == begin && aux->getEndVertex()->getKey() == end) {
+            return true;
+        }
+    }
+    return false;
+}
 
 #endif //GRAPHTEMPLATES_GRAPH_H
