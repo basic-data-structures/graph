@@ -18,6 +18,7 @@ class List {
         ~List();
 
         Type getData(int pos);
+        bool existsData(Type key);
         int getElements();
         void insertIn(Type key, int pos);
         void insertAtEnd(Type key);
@@ -46,6 +47,19 @@ List<Type>:: ~List() {
 template < typename Type >
 Type List<Type>:: getData(int pos) {
     return getNode(pos)->getData();
+}
+
+template < typename Type >
+bool List<Type>:: existsData(Type data) {
+    bool found = false;
+    int i = 0;
+    while((i < elements) && !found) {
+        if(data == getData(i)) {
+        found = true;
+        }
+        i++;
+    }
+    return found;
 }
 
 template < typename Type >
