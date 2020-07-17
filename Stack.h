@@ -16,9 +16,9 @@ public:
     Stack();
     ~Stack();
     int getElements();
+    Type peek();
     void push(Type key);
     void pop();
-    Type peek();
     bool empty();
 };
 
@@ -40,8 +40,9 @@ int Stack<Type>:: getElements() {
 }
 
 template < typename Type >
-bool Stack<Type>:: empty() {
-    return elements == 0;
+Type Stack<Type>:: peek() {
+    if (!empty())
+        return last->getData();
 }
 
 template < typename Type >
@@ -63,8 +64,8 @@ void Stack<Type>:: pop() {
 }
 
 template < typename Type >
-Type Stack<Type>:: peek() {
-    if (!empty())
-        return last->getData();
+bool Stack<Type>:: empty() {
+    return elements == 0;
 }
+
 #endif //STACK_H
