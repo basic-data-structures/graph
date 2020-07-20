@@ -123,12 +123,10 @@ bool Graph<Type>:: existsVertex(Type key) {
 template<typename Type>
 bool Graph<Type>:: existsEdge(Type begin, Type end) {
     if (existsVertex(begin) && existsVertex(end)) {
-        for (int i = 0; i < adjList.getElements(); ++i) {
-            for (int j = 0; j < adjList.getData(i)->getNeighbors()->getElements(); j++) {
-                Vertex<Type>* beginNode = adjList.getData(i);
-                if (beginNode->getNeighbors()->getData(j)->getKey() == end)
-                    return true;
-            }
+        Vertex<Type>* begAux = getVertex(begin);
+        for (int i = 0; i < begAux->getNeighbors()->getElements(); i++) {
+            if (begAux->getNeighbors()->getData(i)->getKey() == end)
+                return true;
         }
     }
     return false;
