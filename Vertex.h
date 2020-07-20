@@ -15,7 +15,7 @@ class Vertex {
         Vertex(Type key);
         Type getKey();
         bool getVisited();
-        List<Type>* getNeighbors();
+        List<Vertex<Type>*>* getNeighbors();
         void setKey(Type key);
         void setVisited(bool visited);
         void addNeighbor(Vertex<Type>* neighbor);
@@ -42,7 +42,7 @@ bool Vertex<Type>:: getVisited() {
 
 /////////////////////////////////////////////
 template <typename Type>
-List<Type>* Vertex<Type>:: getNeighbors() {
+List<Vertex<Type>*>* Vertex<Type>:: getNeighbors() {
     return &neighbors;
 }
 
