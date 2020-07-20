@@ -38,6 +38,10 @@ class Graph {
         //  PRE: -
         // POST: Returns true if a edge from begin to end exists
         bool existsEdge(Type begin, Type end);
+
+        //  PRE: -
+        // POST: Sets all the vertices in the graph to "not-visited"
+        void setAllNotVisited();
 };
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
@@ -130,6 +134,13 @@ bool Graph<Type>:: existsEdge(Type begin, Type end) {
         }
     }
     return false;
+}
+
+template<typename Type>
+void Graph<Type>:: setAllNotVisited() {
+    for (int i = 0; i < adjList.getElements(); i++) {
+        adjList.getData(i)->setVisited(false);
+    }
 }
 
 #endif //GRAPHTEMPLATES_GRAPH_H
