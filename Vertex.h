@@ -9,13 +9,16 @@ class Vertex {
     private:
         Type key;
         bool visited;
+        List<Vertex<Type>*> neighbors;
 
     public:
         Vertex(Type key);
         Type getKey();
         bool getVisited();
+        List<Type>* getNeighbors();
         void setKey(Type key);
         void setVisited(bool visited);
+        void addNeighbor(Vertex<Type>* neighbor);
 };
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
@@ -39,6 +42,12 @@ bool Vertex<Type>:: getVisited() {
 
 /////////////////////////////////////////////
 template <typename Type>
+List<Type>* Vertex<Type>:: getNeighbors() {
+    return &neighbors;
+}
+
+/////////////////////////////////////////////
+template <typename Type>
 void Vertex<Type>:: setKey(Type key) {
     this->key = key;
 }
@@ -47,6 +56,12 @@ void Vertex<Type>:: setKey(Type key) {
 template <typename Type>
 void Vertex<Type>:: setVisited(bool visited) {
     this->visited = visited;
+}
+
+/////////////////////////////////////////////
+template <typename Type>
+void Vertex<Type>:: addNeighbor(Vertex<Type>* neighbor) {
+    neighbors.insertAtBeginning(neighbor);
 }
 
 #endif //GRAPHTEMPLATES_VERTEX_H
