@@ -20,7 +20,6 @@ class List {
         Type getData(int pos);
         bool existsData(Type key);
         int getElements();
-        Node<Type>* getNode(Type key);
         void insertIn(Type key, int pos);
         void insertAtEnd(Type key);
         void insertAtBeginning(Type key);
@@ -78,18 +77,6 @@ Node<Type>* List<Type>:: getNodeFrom(int pos) {
 }
 
 template < typename Type >
-Node<Type>* List<Type>:: getNode(Type key) {
-    Node<Type> *aux = 0;
-    if (existsData(key)) {
-        aux = first;
-        while (aux->getData() != key) {
-            aux = aux->getNext();
-        }
-    }
-    return aux;
-}
-
-template < typename Type >
 bool List<Type>:: empty() {
     return first == 0;
 }
@@ -141,7 +128,7 @@ template < typename Type >
 void List<Type>:: printData() {
     if (!empty()) {
         for (int i = 0; i < elements; i++) {
-            getNode(i)->mostrarType();
+            getNodeFrom(i)->printData();
         }
     }
 }
