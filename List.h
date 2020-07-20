@@ -28,9 +28,7 @@ class List {
         bool empty();
         void printData();
         void listElements();
-
-    private:
-        Node<Type>* getNode(int pos);
+        Node<Type>* getNodeFrom(int pos);
 };
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
@@ -47,7 +45,7 @@ List<Type>:: ~List() {
 
 template < typename Type >
 Type List<Type>:: getData(int pos) {
-    return getNode(pos)->getData();
+    return getNodeFrom(pos)->getData();
 }
 
 template < typename Type >
@@ -69,7 +67,7 @@ int List<Type>:: getElements() {
 }
 
 template < typename Type >
-Node<Type>* List<Type>:: getNode(int pos) {
+Node<Type>* List<Type>:: getNodeFrom(int pos) {
     Node<Type> *aux = first;
     int i = 0;
     while (i < pos) {
@@ -115,7 +113,7 @@ void List<Type>:: insertIn(Type key, int pos) {
         first = newNode;
     }
     else {
-        Node<Type>* previous = getNode(pos - 1);
+        Node<Type>* previous = getNodeFrom(pos - 1);
         newNode->setNext(previous->getNext());
         previous->setNext(newNode);
     }
@@ -131,7 +129,7 @@ void List<Type>:: remove(int pos) {
     }
 
     else {
-        Node<Type>* previous = getNode(pos - 1);
+        Node<Type>* previous = getNodeFrom(pos - 1);
         erase = previous->getNext();
         previous->setNext(erase->getNext());
     }
