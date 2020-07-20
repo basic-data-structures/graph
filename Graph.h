@@ -2,12 +2,14 @@
 #define GRAPHTEMPLATES_GRAPH_H
 
 #include "Vertex.h"
+#include "Edge.h"
 
 template <typename Type>
 class Graph {
 
     private:
         List<Vertex<Type>*> adjList;
+        List<Edge<Type>*> edges;
         int elements;
 
     public:
@@ -21,15 +23,19 @@ class Graph {
 
         //  PRE: -
         // POST: Creates a graph with an edge connecting begin and end
-        Graph(Type begin, Type end);
+        Graph(Type begin, Type end, unsigned cost = 0);
 
         //  PRE: -
         // POST: If the key exists in the graph, it returns the vertex. Otherwise it returns NULL
         Vertex<Type>* getVertex(Type key);
 
+        //  PRE: -
+        // POST: If a path from begin to end exists, it returns the edge. Otherwise it returns NULL
+        Edge<Type>* getEdge(Type begin, Type end);
+
         //  PRE: The edge connecting begin and end must not exist yet
         // POST: Inserts a new edge from begin to end
-        void addEdge(Type begin, Type end);
+        void addEdge(Type begin, Type end, unsigned cost = 0);
 
         //  PRE: -
         // POST: Returns true if a vertex with that key exists
@@ -55,15 +61,21 @@ Graph<Type>:: ~Graph() {
     for (int i = 0; i < adjList.getElements(); i ++) {
         delete adjList.getData(i);
     }
+    for (int j = 0; j < edges.getElements(); ++j) {
+        delete edges.getData(j);
+    }
 }
 
 template<typename Type>
-Graph<Type>:: Graph(Type begin, Type end) {
+Graph<Type>:: Graph(Type begin, Type end, unsigned cost) {
     Vertex<Type>* beg = new Vertex<Type>(begin);
     Vertex<Type>* en = new Vertex<Type>(end);
+    Edge<Type>* edge = new Edge<Type>(beg, en, cost);
     beg->addNeighbor(en);
     adjList.insertAtEnd(beg);
     adjList.insertAtEnd(en);
+    edges.insertAtBeginning(edge);
+    cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
     elements += 2;
 }
 
@@ -77,7 +89,20 @@ Vertex<Type>* Graph<Type>:: getVertex(Type key) {
 }
 
 template<typename Type>
-void Graph<Type>:: addEdge(Type begin, Type end) {
+Edge<Type>* Graph<Type>:: getEdge(Type begin, Type end) {
+    Edge<Type>* edge = 0;
+    if (existsEdge(begin, end)) {
+        for (int i = 0; i < edges.getElements(); ++i) {
+            if (edges.getData(i)->getBeginVertex() == getVertex(begin) && edges.getData(i)->getEndVertex() == getVertex(end)) {
+                edge = edges.getData(i);
+            }
+        }
+    }
+    return edge;
+}
+
+template<typename Type>
+void Graph<Type>:: addEdge(Type begin, Type end, unsigned cost) {
     if (!existsEdge(begin, end)) {
         Vertex<Type>* begAux;
         Vertex<Type>* endAux;
@@ -108,10 +133,12 @@ void Graph<Type>:: addEdge(Type begin, Type end) {
             adjList.insertAtEnd(endAux);
             elements += 2;
         }
-        cout << "\n\tEdge connecting " << begin << " and " << end << " added successfully!\n";
+        Edge<Type>* edge = new Edge<Type>(begAux, endAux, cost);
+        edges.insertAtBeginning(edge);
+        cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
     }
     else
-        cout << "\n\tThere's already an edge connecting " << begin << " and " << end << "!\n";
+        cout << "\t\tThere's already an edge connecting " << begin << " and " << end << "!\n";
 }
 
 template<typename Type>
