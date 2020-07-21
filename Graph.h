@@ -25,14 +25,6 @@ class Graph {
         // POST: Creates a graph with an edge connecting begin and end
         Graph(Type begin, Type end, unsigned cost = 0);
 
-        //  PRE: -
-        // POST: If the key exists in the graph, it returns the vertex. Otherwise it returns NULL
-        Vertex<Type>* getVertex(Type key);
-
-        //  PRE: -
-        // POST: If a path from begin to end exists, it returns the edge. Otherwise it returns NULL
-        Edge<Type>* getEdge(Type begin, Type end);
-
         //  PRE: The edge connecting begin and end must not exist yet
         // POST: Inserts a new edge from begin to end
         void addEdge(Type begin, Type end, unsigned cost = 0);
@@ -48,6 +40,35 @@ class Graph {
         //  PRE: -
         // POST: Sets all the vertices in the graph to "not-visited"
         void setAllNotVisited();
+
+        //  PRE: -
+        // POST: If the key exists in the graph, it returns the vertex. Otherwise it returns NULL
+        Vertex<Type>* getVertex(Type key);
+
+        //  PRE: -
+        // POST: If a path from begin to end exists, it returns the edge. Otherwise it returns NULL
+        Edge<Type>* getEdge(Type begin, Type end);
+
+        //  PRE: -
+        // POST: It searches all the vertices of the graph starting from the key given.
+        //       If the key doesn't exist in the graph, a message is printed on the screen.
+        void DFS(Type key);
+
+        //  PRE: -
+        // POST:
+        //       If the key doesn't exist in the graph, a message is printed on the screen.
+        void BFS(Type key);
+
+private:
+
+    //  PRE: The vertex must exist in the graph
+    // POST: Recursive algorithm that searches all the vertices of a graph starting from the given vertex
+    void DFS(Vertex<Type>* vertex);
+
+    //  PRE: The vertex must exist in the graph
+    // POST:
+    void BFS(Vertex<Type>* vertex);
+
 };
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
@@ -167,6 +188,52 @@ template<typename Type>
 void Graph<Type>:: setAllNotVisited() {
     for (int i = 0; i < adjList.getElements(); i++) {
         adjList.getData(i)->setVisited(false);
+    }
+}
+
+template<typename Type>
+void Graph<Type>:: DFS(Type key) {
+    cout << "\t---------------------------- DFS -------------------------------\n";
+    if (existsVertex(key)) {
+        cout << "\t\tStarting DFS from " << key << "...\n\t";
+        setAllNotVisited();
+        DFS(getVertex(key));
+    } else
+        cout << "\tOps! That value doesn't exist in the graph. Try again!\n";
+    cout << "\n\t----------------------------------------------------------------\n\n";
+}
+
+template<typename Type>
+void Graph<Type>:: BFS(Type key) {
+    cout << "\t---------------------------- BFS -------------------------------\n";
+    if (existsVertex(key)) {
+        cout << "\t\tStarting BFS from " << key << "...\n\t";
+        setAllNotVisited();
+        BFS(getVertex(key));
+    } else
+        cout << "\tOps! That value doesn't exist in the graph. Try again!\n";
+    cout << "\n\t----------------------------------------------------------------\n\n";
+}
+
+template<typename Type>
+void Graph<Type>:: DFS(Vertex<Type> *vertex) {
+    vertex->setVisited(true);
+    cout << "\t" << vertex->getKey();
+    for (int i = 0; i < vertex->getNeighbors()->getElements(); i++) {
+        if (!vertex->getNeighbors()->getData(i)->getVisited()) {
+            DFS(vertex->getNeighbors()->getData(i));
+        }
+    }
+}
+
+template<typename Type>
+void Graph<Type>:: BFS(Vertex<Type> *vertex) {
+    vertex->setVisited(true);
+    cout << "\t" << vertex->getKey();
+    for (int i = 0; i < adjList.getElements(); i++) {
+        if (!adjList.getData(i)->getVisited()) {
+            BFS(adjList.getData(i));
+        }
     }
 }
 
