@@ -1,10 +1,21 @@
 #include "Graph.h"
+#include "Vector.h"
 
 #include <iostream>
 using namespace std;
 
 typedef int type;
 int main() {
+
+    cout << "\n\n\t========================= VECTOR ===============================\n\n";
+    Vector<int> vector(15,-1);
+    for (int i = 0; i < vector.getVectorSize(); ++i) {
+        cout << "\tInserting " << i+2 << " in " << i << "\n";
+        vector.insert(i+2,i);
+    }
+    cout << "\n\tThe vector can store up to " << vector.getVectorSize() << " elements\n";
+    vector.resize(9);
+    cout << "\n\tThe vector was resized! Now it can store up to " << vector.getVectorSize() << " elements\n";
 
     cout << "\n\n\t========================= GRAPH ================================\n\n";
 
@@ -36,9 +47,9 @@ int main() {
 
     cout << "\n\n";
 
-    graph->DFS(2);
+    graph->showDFS(2);
     cout << "\n";
-    graph->BFS(2);
+    graph->showBFS(2);
 
     cout << "\t\t\t\t\tV1 <-- E2-E1 --> V2\n"
             "\t\t\t\t\t | /\\            |\n"
