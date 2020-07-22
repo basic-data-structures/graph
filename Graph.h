@@ -9,7 +9,7 @@ class Graph {
 
     private:
         List<Vertex<Type>*> adjList;
-        List<Edge<Type>*> edges;
+        List<Edge<Type>*> edges; // Matriz
         int elements;
 
     public:
@@ -52,12 +52,12 @@ class Graph {
         //  PRE: -
         // POST: It searches all the vertices of the graph starting from the key given.
         //       If the key doesn't exist in the graph, a message is printed on the screen.
-        void DFS(Type key);
+        void showDFS(Type key);
 
         //  PRE: -
         // POST:
         //       If the key doesn't exist in the graph, a message is printed on the screen.
-        void BFS(Type key);
+        void showBFS(Type key);
 
 private:
 
@@ -192,7 +192,7 @@ void Graph<Type>:: setAllNotVisited() {
 }
 
 template<typename Type>
-void Graph<Type>:: DFS(Type key) {
+void Graph<Type>:: showDFS(Type key) {
     cout << "\t---------------------------- DFS -------------------------------\n";
     if (existsVertex(key)) {
         cout << "\t\tStarting DFS from " << key << "...\n\t";
@@ -204,7 +204,7 @@ void Graph<Type>:: DFS(Type key) {
 }
 
 template<typename Type>
-void Graph<Type>:: BFS(Type key) {
+void Graph<Type>:: showBFS(Type key) {
     cout << "\t---------------------------- BFS -------------------------------\n";
     if (existsVertex(key)) {
         cout << "\t\tStarting BFS from " << key << "...\n\t";

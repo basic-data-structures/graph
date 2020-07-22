@@ -50,9 +50,9 @@ int main() {
             "\t\t\t\t\t\\/            \\ \\/\n"
             "\t\t\t\t\tV4              V3\n\n";
 
-    graph->DFS(2);
+    graph->showDFS(2);
     cout << "\n";
-    graph->BFS(2);
+    graph->showBFS(2);
 
     cout << "\n\t================================================================\n";
 
