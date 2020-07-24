@@ -77,8 +77,8 @@ Vector<Type>:: Vector(Type null) : size(0), data(0), null(null) {}
 template<typename Type>
 Vector<Type>:: Vector(unsigned size, Type null) {
     this->size = size;
-    data = new Type[size];
     this->null = null;
+    data = new Type[size];
     assignNull(0, size);
 }
 
@@ -87,7 +87,7 @@ Vector<Type>:: Vector(const Vector& vec) {
     size = vec.size;
     if (size > 0) {
         data = new Type[size];
-        copyData(vec.data, 1, size);
+        copyData(vec.data, 0, size);
     } else data = 0;
 }
 
@@ -109,10 +109,12 @@ void Vector<Type>:: remove(unsigned pos) {
 
 template<typename Type>
 unsigned Vector<Type>:: getPosition(Type data) {
-    for (int i = 0; i < size; ++i) {
+    unsigned pos = null;
+    for (int i = 0; i < size; i++) {
         if (getElement(i) == data)
-            return i;
+            pos = i;
     }
+    return pos;
 }
 
 template<typename Type>
@@ -126,21 +128,23 @@ Type Vector<Type>:: getElement(unsigned pos) {
 }
 
 template<typename Type>
-void Vector<Type>:: resize(unsigned size) {
-    if (this->size != size) {
+void Vector<Type>:: resize(unsigned newSize) {
+    if (this->size != newSize) {
         Type* aux = data;
-        data = new Type[size];
-        copyData(aux, 0, size);
+        data = new Type[newSize];
+        cout << "\tBEFORE -- Begin: " << 0 << "\tEnd: " << newSize << "\tSize: " << this->size << "\n";
+        copyData(aux, 0, newSize);
         delete []aux;
-        if (size > size)
-            assignNull(this->size + 1, size);
-        this->size = size;
+        if (this->size < newSize)
+            assignNull(this->size, newSize);
+        this->size = newSize;
+        cout << "\tAFTER -- Begin: " << 0 << "\tEnd: " << newSize << "\tSize: " << this->size << "\n";
     }
 }
 
 template<typename Type>
 void Vector<Type>:: printVector() {
-    for (unsigned i = 1; i <= size; i++)
+    for (unsigned i = 0; i < size; i++)
         cout << data[i] << " ";
 }
 

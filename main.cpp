@@ -6,23 +6,33 @@
 using namespace std;
 
 int main() {
-
+/*
     cout << "\n\n\t========================== MATRIX ===============================\n\n";
     Matrix<int> matrix(15,-1);
     cout << "\tInserting " << 4 << " in [0,0]\n";
     matrix.insert(4,0,0);
     cout << "\t" << matrix.getData(0,0) << "\n";
     matrix.printMatrix();
-
+*/
     cout << "\n\n\t========================= VECTOR ===============================\n\n";
-    Vector<int> vector(15,-1);
+    Vector<int> vector(5,-1);
     for (int i = 0; i < vector.getVectorSize(); ++i) {
         cout << "\tInserting " << i+2 << " in " << i << "\n";
         vector.insert(i+2,i);
     }
     cout << "\n\tThe vector can store up to " << vector.getVectorSize() << " elements\n";
+
+    vector.resize(7);
+    cout << "\n\tThe vector was resized! Now it can store up to " << vector.getVectorSize() << " elements\n";
+    for (int i = 0; i < vector.getVectorSize(); ++i) {
+        cout << "\t" << i << " -> " << vector.getElement(i) << "\n";
+    }
+
     vector.resize(9);
     cout << "\n\tThe vector was resized! Now it can store up to " << vector.getVectorSize() << " elements\n";
+    for (int i = 0; i < vector.getVectorSize(); ++i) {
+        cout << "\t" << i << " -> " << vector.getElement(i) << "\n";
+    }
 
     cout << "\n\n\t========================= GRAPH ================================\n\n";
 
@@ -31,6 +41,8 @@ int main() {
     graph.addEdge(1,4,7);
     graph.addEdge(2,1,3);
     graph.addEdge(2,3,14);
+    graph.addEdge(5,6,7);
+    graph.addEdge(6,3,2);
 
     cout << "\n\n";
 

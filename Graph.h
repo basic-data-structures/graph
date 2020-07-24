@@ -49,12 +49,12 @@ class Graph {
         int getCost(Type begin, Type end);
 
         //  PRE: -
-        // POST: It searches all the vertices of the graph starting from the key given.
+        // POST: Depth First Search all the vertices starting from the key given.
         //       If the key doesn't exist in the graph, a message is printed on the screen.
         void showDFS(Type key);
 
         //  PRE: -
-        // POST:
+        // POST: Breadth First Search all the vertices of the graph starting from the key given.
         //       If the key doesn't exist in the graph, a message is printed on the screen.
         void showBFS(Type key);
 
@@ -72,10 +72,15 @@ private:
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
 template<typename Type>
+constexpr std::size_t size_of(Type const&) {
+    return sizeof(Type);
+}
+
+template<typename Type>
 Graph<Type>:: Graph(Type begin, Type end, int cost) {
     // Initialize matrix and vector with null
     costsMatrix = new Matrix<int>(20, -1);
-    dataIndex = new Vector<Type>(20, -1);
+    dataIndex = new Vector<Type>(2, -1);
 
     Vertex<Type>* beg = new Vertex<Type>(begin);
     Vertex<Type>* en = new Vertex<Type>(end);
@@ -141,6 +146,9 @@ void Graph<Type>:: addEdge(Type begin, Type end, int cost) {
             endAux = new Vertex<Type>(end);
             begAux->addNeighbor(endAux);
             adjList.insertAtEnd(endAux);
+            cout << "\tData Index Size Before: " << dataIndex->getVectorSize() << "\n";
+            dataIndex->resize(dataIndex->getVectorSize() + 1);
+            cout << "\tData Index Size After: " << dataIndex->getVectorSize() << "\n";
             dataIndex->insert(end, elements);
             elements += 1;
         }
@@ -150,6 +158,9 @@ void Graph<Type>:: addEdge(Type begin, Type end, int cost) {
             endAux = getVertex(end);
             begAux->addNeighbor(endAux);
             adjList.insertAtEnd(begAux);
+            cout << "\tData Index Size Before: " << dataIndex->getVectorSize() << "\n";
+            dataIndex->resize(dataIndex->getVectorSize() + 1);
+            cout << "\tData Index Size After: " << dataIndex->getVectorSize() << "\n";
             dataIndex->insert(begin, elements);
             elements += 1;
         }
@@ -159,6 +170,9 @@ void Graph<Type>:: addEdge(Type begin, Type end, int cost) {
             endAux = new Vertex<Type>(end);
             begAux->addNeighbor(endAux);
             adjList.insertAtEnd(begAux);
+            cout << "\tData Index Size Before: " << dataIndex->getVectorSize() << "\n";
+            dataIndex->resize(dataIndex->getVectorSize() + 2);
+            cout << "\tData Index Size After: " << dataIndex->getVectorSize() << "\n";
             dataIndex->insert(begin, elements);
             elements += 1;
             adjList.insertAtEnd(endAux);
