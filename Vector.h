@@ -38,6 +38,10 @@ class Vector {
         void remove(unsigned pos);
 
         // PRE: -
+        // POST: Returns the position in which the data is stored
+        unsigned getPosition(Type data);
+
+        // PRE: -
         // POST: Returns vector's size
         unsigned getVectorSize();
 
@@ -75,7 +79,7 @@ Vector<Type>:: Vector(unsigned size, Type null) {
     this->size = size;
     data = new Type[size];
     this->null = null;
-    assignNull(0, size - 1);
+    assignNull(0, size);
 }
 
 template<typename Type>
@@ -104,6 +108,14 @@ void Vector<Type>:: remove(unsigned pos) {
 }
 
 template<typename Type>
+unsigned Vector<Type>:: getPosition(Type data) {
+    for (int i = 0; i < size; ++i) {
+        if (getElement(i) == data)
+            return i;
+    }
+}
+
+template<typename Type>
 unsigned Vector<Type>:: getVectorSize() {
     return size;
 }
@@ -118,10 +130,10 @@ void Vector<Type>:: resize(unsigned size) {
     if (this->size != size) {
         Type* aux = data;
         data = new Type[size];
-        copyData(aux, 0, size - 1);
+        copyData(aux, 0, size);
         delete []aux;
         if (size > size)
-            assignNull(this->size + 1, size - 1);
+            assignNull(this->size + 1, size);
         this->size = size;
     }
 }
@@ -134,13 +146,13 @@ void Vector<Type>:: printVector() {
 
 template<typename Type>
 void Vector<Type>:: assignNull(unsigned begin, unsigned end) {
-    for (unsigned i = begin; i <= end; i++)
+    for (unsigned i = begin; i < end; i++)
         data[i] = null;
 }
 
 template<typename Type>
 void Vector<Type>:: copyData(Type* vec, unsigned begin, unsigned end) {
-    for (unsigned i = begin; i <= end; i++)
+    for (unsigned i = begin; i < end; i++)
         data[i] = vec[i];
 }
 

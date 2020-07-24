@@ -2,32 +2,31 @@
 #define GRAPHTEMPLATES_GRAPH_H
 
 #include "Vertex.h"
-#include "Edge.h"
+#include "Matrix.h"
+#include "Vector.h"
 
 template <typename Type>
 class Graph {
 
     private:
         List<Vertex<Type>*> adjList;
-        List<Edge<Type>*> edges; // Matriz
+        Matrix<int>* costsMatrix;
+        Vector<Type>* dataIndex;
         int elements;
 
     public:
+
         //  PRE: -
-        // POST: Creates an empty graph
-        Graph();
+        // POST: Creates a graph with an edge connecting begin and end
+        Graph(Type begin, Type end, int cost = 0);
 
         //  PRE: -
         // POST: Free resources
         ~Graph();
 
-        //  PRE: -
-        // POST: Creates a graph with an edge connecting begin and end
-        Graph(Type begin, Type end, unsigned cost = 0);
-
         //  PRE: The edge connecting begin and end must not exist yet
         // POST: Inserts a new edge from begin to end
-        void addEdge(Type begin, Type end, unsigned cost = 0);
+        void addEdge(Type begin, Type end, int cost = 0);
 
         //  PRE: -
         // POST: Returns true if a vertex with that key exists
@@ -45,9 +44,9 @@ class Graph {
         // POST: If the key exists in the graph, it returns the vertex. Otherwise it returns NULL
         Vertex<Type>* getVertex(Type key);
 
-        //  PRE: -
-        // POST: If a path from begin to end exists, it returns the edge. Otherwise it returns NULL
-        Edge<Type>* getEdge(Type begin, Type end);
+        // PRE: -
+        // POST: Returns the cost of going from begin to end
+        int getCost(Type begin, Type end);
 
         //  PRE: -
         // POST: It searches all the vertices of the graph starting from the key given.
@@ -73,8 +72,29 @@ private:
 
 ///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
 template<typename Type>
-Graph<Type>:: Graph() {
-    elements = 0;
+Graph<Type>:: Graph(Type begin, Type end, int cost) {
+    // Initialize matrix and vector with null
+    costsMatrix = new Matrix<int>(20, -1);
+    dataIndex = new Vector<Type>(20, -1);
+
+    Vertex<Type>* beg = new Vertex<Type>(begin);
+    Vertex<Type>* en = new Vertex<Type>(end);
+
+    // Add end to begin neighbor's
+    beg->addNeighbor(en);
+
+    // Add begin
+    adjList.insertAtEnd(beg);
+    dataIndex->insert(begin, elements);
+    elements += 1;
+
+    // Add end
+    adjList.insertAtEnd(en);
+    dataIndex->insert(end, elements);
+    elements += 1;
+
+    costsMatrix->insert(cost, dataIndex->getPosition(begin), dataIndex->getPosition(end));
+    cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
 }
 
 template<typename Type>
@@ -82,22 +102,8 @@ Graph<Type>:: ~Graph() {
     for (int i = 0; i < adjList.getElements(); i ++) {
         delete adjList.getData(i);
     }
-    for (int j = 0; j < edges.getElements(); ++j) {
-        delete edges.getData(j);
-    }
-}
-
-template<typename Type>
-Graph<Type>:: Graph(Type begin, Type end, unsigned cost) {
-    Vertex<Type>* beg = new Vertex<Type>(begin);
-    Vertex<Type>* en = new Vertex<Type>(end);
-    Edge<Type>* edge = new Edge<Type>(beg, en, cost);
-    beg->addNeighbor(en);
-    adjList.insertAtEnd(beg);
-    adjList.insertAtEnd(en);
-    edges.insertAtBeginning(edge);
-    cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
-    elements += 2;
+    delete costsMatrix;
+    delete dataIndex;
 }
 
 template<typename Type>
@@ -110,52 +116,56 @@ Vertex<Type>* Graph<Type>:: getVertex(Type key) {
 }
 
 template<typename Type>
-Edge<Type>* Graph<Type>:: getEdge(Type begin, Type end) {
-    Edge<Type>* edge = 0;
-    if (existsEdge(begin, end)) {
-        for (int i = 0; i < edges.getElements(); ++i) {
-            if (edges.getData(i)->getBeginVertex() == getVertex(begin) && edges.getData(i)->getEndVertex() == getVertex(end)) {
-                edge = edges.getData(i);
-            }
-        }
-    }
-    return edge;
+int Graph<Type>:: getCost(Type begin, Type end) {
+    int begPos = dataIndex->getPosition(begin);
+    int endPos = dataIndex->getPosition(end);
+    return costsMatrix->getData(begPos, endPos);
 }
 
 template<typename Type>
-void Graph<Type>:: addEdge(Type begin, Type end, unsigned cost) {
+void Graph<Type>:: addEdge(Type begin, Type end, int cost) {
+
     if (!existsEdge(begin, end)) {
+
         Vertex<Type>* begAux;
         Vertex<Type>* endAux;
+
         if (existsVertex(begin) && existsVertex(end)) {
             begAux = getVertex(begin);
             endAux = getVertex(end);
             begAux->addNeighbor(endAux);
         }
+
         else if (existsVertex(begin)) {
             begAux = getVertex(begin);
             endAux = new Vertex<Type>(end);
             begAux->addNeighbor(endAux);
             adjList.insertAtEnd(endAux);
+            dataIndex->insert(end, elements);
             elements += 1;
         }
+
         else if (existsVertex(end)) {
             begAux = new Vertex<Type>(begin);
             endAux = getVertex(end);
             begAux->addNeighbor(endAux);
             adjList.insertAtEnd(begAux);
+            dataIndex->insert(begin, elements);
             elements += 1;
         }
+
         else {
             begAux = new Vertex<Type>(begin);
             endAux = new Vertex<Type>(end);
             begAux->addNeighbor(endAux);
             adjList.insertAtEnd(begAux);
+            dataIndex->insert(begin, elements);
+            elements += 1;
             adjList.insertAtEnd(endAux);
-            elements += 2;
+            dataIndex->insert(end, elements);
+            elements += 1;
         }
-        Edge<Type>* edge = new Edge<Type>(begAux, endAux, cost);
-        edges.insertAtBeginning(edge);
+        costsMatrix->insert(cost, dataIndex->getPosition(begin), dataIndex->getPosition(end));
         cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
     }
     else

@@ -1,11 +1,18 @@
 #include "Graph.h"
 #include "Vector.h"
+#include "Matrix.h"
 
 #include <iostream>
 using namespace std;
 
-typedef int type;
 int main() {
+
+    cout << "\n\n\t========================== MATRIX ===============================\n\n";
+    Matrix<int> matrix(15,-1);
+    cout << "\tInserting " << 4 << " in [0,0]\n";
+    matrix.insert(4,0,0);
+    cout << "\t" << matrix.getData(0,0) << "\n";
+    matrix.printMatrix();
 
     cout << "\n\n\t========================= VECTOR ===============================\n\n";
     Vector<int> vector(15,-1);
@@ -19,37 +26,35 @@ int main() {
 
     cout << "\n\n\t========================= GRAPH ================================\n\n";
 
-    Graph<type>* graph = new Graph<type>(1,2,5);
-    graph->addEdge(1,2,4);
-    graph->addEdge(2,1,3);
-    graph->addEdge(2,3,14);
-    graph->addEdge(3,1,7);
-    graph->addEdge(1,4,2);
+    Graph<int> graph(1,2,5);
+    graph.addEdge(1,2,4);
+    graph.addEdge(1,4,7);
+    graph.addEdge(2,1,3);
+    graph.addEdge(2,3,14);
 
     cout << "\n\n";
 
     cout << boolalpha;
-    cout << "\t\tV1 to V2: " << graph->existsEdge(1,2) << " - Cost: " << graph->getEdge(1,2)->getCost() << "\n";
-    cout << "\t\tV1 to V4: " << graph->existsEdge(1,4) << " - Cost: " << graph->getEdge(1,4)->getCost() << "\n";
-    cout << "\t\tV2 to V1: " << graph->existsEdge(2,1) << " - Cost: " << graph->getEdge(2,1)->getCost() << "\n";
-    cout << "\t\tV2 to V3: " << graph->existsEdge(2,3) << " - Cost: " << graph->getEdge(2,3)->getCost() << "\n";
-    cout << "\t\tV3 to V1: " << graph->existsEdge(3,1) << " - Cost: " << graph->getEdge(3,1)->getCost() <<  "\n";
-    cout << "\t\tV1 to V3: " << graph->existsEdge(1,3) << "\n";
+    cout << "\t\tV1 to V2: " << graph.existsEdge(1,2) << " - Cost: " << graph.getCost(1,2) << "\n";
+    cout << "\t\tV1 to V4: " << graph.existsEdge(1,4) << " - Cost: " << graph.getCost(1,4) << "\n";
+    cout << "\t\tV2 to V1: " << graph.existsEdge(2,1) << " - Cost: " << graph.getCost(2,1) << "\n";
+    cout << "\t\tV2 to V3: " << graph.existsEdge(2,3) << " - Cost: " << graph.getCost(2,3) << "\n";
+    cout << "\t\tV1 to V3: " << graph.existsEdge(1,3) << "\n";
 
     cout << "\n\n";
 
-    cout << "\t\tV0 exists: " << graph->existsVertex(0) << "\n";
-    cout << "\t\tV1 exists: " << graph->existsVertex(1) << "\n";
-    cout << "\t\tV2 exists: " << graph->existsVertex(2) << "\n";
-    cout << "\t\tV3 exists: " << graph->existsVertex(3) << "\n";
-    cout << "\t\tV4 exists: " << graph->existsVertex(4) << "\n";
-    cout << "\t\tV5 exists: " << graph->existsVertex(5) << "\n";
+    cout << "\t\tV0 exists: " << graph.existsVertex(0) << "\n";
+    cout << "\t\tV1 exists: " << graph.existsVertex(1) << "\n";
+    cout << "\t\tV2 exists: " << graph.existsVertex(2) << "\n";
+    cout << "\t\tV3 exists: " << graph.existsVertex(3) << "\n";
+    cout << "\t\tV4 exists: " << graph.existsVertex(4) << "\n";
+    cout << "\t\tV5 exists: " << graph.existsVertex(5) << "\n";
 
     cout << "\n\n";
 
-    graph->showDFS(2);
+    graph.showDFS(2);
     cout << "\n";
-    graph->showBFS(2);
+    graph.showBFS(2);
 
     cout << "\t\t\t\t\tV1 <-- E2-E1 --> V2\n"
             "\t\t\t\t\t | /\\            |\n"
@@ -61,12 +66,10 @@ int main() {
             "\t\t\t\t\t\\/            \\ \\/\n"
             "\t\t\t\t\tV4              V3\n\n";
 
-    graph->showDFS(2);
+    graph.showDFS(2);
     cout << "\n";
-    graph->showBFS(2);
+    graph.showBFS(2);
 
     cout << "\n\t================================================================\n";
-
-    delete graph;
     return 0;
 }
