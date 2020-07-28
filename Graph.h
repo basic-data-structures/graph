@@ -96,6 +96,7 @@ Graph<Type, Cost>:: Graph(Type begin, Type end, Type nullType, Cost cost, Cost n
 
 template<typename Type, typename Cost>
 Graph<Type, Cost>:: ~Graph() {
+    delete costsMatrix;
     delete dataIndex;
 }
 
@@ -108,25 +109,30 @@ int Graph<Type, Cost>:: getCost(Type begin, Type end) {
 
 template<typename Type, typename Cost>
 void Graph<Type, Cost>:: addEdge(Type begin, Type end, Cost cost) {
-    if (existsVertex(begin) && !existsVertex(end)) {
-        dataIndex->resize(elements + 1);
-        dataIndex->insert(end, elements);
-        elements += 1;
-    }
-    else if (!existsVertex(begin) && existsVertex(end)) {
-        dataIndex->resize(elements + 1);
-        dataIndex->insert(begin, elements);
-        elements += 1;
-    }
-    else if (!existsVertex(begin) && !existsVertex(end)) {
-        dataIndex->resize(elements + 2);
-        dataIndex->insert(begin, elements);
-        elements += 1;
-        dataIndex->insert(end, elements);
-        elements += 1;
-    }
     if (!existsEdge(begin, end)) {
-        costsMatrix->insert(cost, dataIndex->getPosition(begin), dataIndex->getPosition(end));
+        if (existsVertex(begin) && existsVertex(end)) {
+            costsMatrix->insert(cost, dataIndex->getPosition(begin), dataIndex->getPosition(end));
+        }
+        else if (existsVertex(begin)) {
+            dataIndex->resize(elements + 1);
+            dataIndex->insert(end, elements);
+            costsMatrix->insert(cost, dataIndex->getPosition(begin), elements);
+            elements += 1;
+        }
+        else if(existsVertex(end)) {
+            dataIndex->resize(elements + 1);
+            dataIndex->insert(begin, elements);
+            costsMatrix->insert(cost, elements, dataIndex->getPosition(end));
+            elements += 1;
+        }
+        else {
+            dataIndex->resize(elements + 2);
+            dataIndex->insert(begin, elements);
+            elements += 1;
+            dataIndex->insert(end, elements);
+            elements += 1;
+            costsMatrix->insert(cost, dataIndex->getPosition(begin), dataIndex->getPosition(end));
+        }
         cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
     }
     else
