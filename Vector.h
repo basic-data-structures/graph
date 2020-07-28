@@ -133,7 +133,7 @@ void Vector<Type>:: resize(unsigned newSize) {
         Type* aux = data;
         data = new Type[newSize];
         cout << "\tBEFORE -- Begin: " << 0 << "\tEnd: " << newSize << "\tSize: " << this->size << "\n";
-        copyData(aux, 0, newSize);
+        copyData(aux, 0, size);
         delete []aux;
         if (this->size < newSize)
             assignNull(this->size, newSize);
@@ -156,8 +156,10 @@ void Vector<Type>:: assignNull(unsigned begin, unsigned end) {
 
 template<typename Type>
 void Vector<Type>:: copyData(Type* vec, unsigned begin, unsigned end) {
-    for (unsigned i = begin; i < end; i++)
-        data[i] = vec[i];
+    if (begin < end) {
+        for (unsigned i = begin; i < end; i++)
+            data[i] = vec[i];
+    }
 }
 
 #endif //GRAPHTEMPLATES_VECTOR_H

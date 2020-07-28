@@ -13,10 +13,10 @@ int main() {
     matrix.insert(4,0,0);
     cout << "\t" << matrix.getData(0,0) << "\n";
     matrix.printMatrix();
-*/
+
     cout << "\n\n\t========================= VECTOR ===============================\n\n";
     Vector<int> vector(5,-1);
-    for (int i = 0; i < vector.getVectorSize(); ++i) {
+    for (int i = 0; i < vector.getVectorSize(); i++) {
         cout << "\tInserting " << i+2 << " in " << i << "\n";
         vector.insert(i+2,i);
     }
@@ -24,19 +24,14 @@ int main() {
 
     vector.resize(7);
     cout << "\n\tThe vector was resized! Now it can store up to " << vector.getVectorSize() << " elements\n";
-    for (int i = 0; i < vector.getVectorSize(); ++i) {
+    for (int i = 0; i < vector.getVectorSize(); i++) {
         cout << "\t" << i << " -> " << vector.getElement(i) << "\n";
     }
-
-    vector.resize(9);
-    cout << "\n\tThe vector was resized! Now it can store up to " << vector.getVectorSize() << " elements\n";
-    for (int i = 0; i < vector.getVectorSize(); ++i) {
-        cout << "\t" << i << " -> " << vector.getElement(i) << "\n";
-    }
-
+*/
     cout << "\n\n\t========================= GRAPH ================================\n\n";
-
-    Graph<int> graph(1,2,5);
+    int NULL_COST = -1;
+    int NULL_TYPE = 0;
+    Graph<int, int> graph( 1, 2, NULL_COST, 5, NULL_TYPE);
     graph.addEdge(1,2,4);
     graph.addEdge(1,4,7);
     graph.addEdge(2,1,3);
@@ -62,12 +57,6 @@ int main() {
     cout << "\t\tV4 exists: " << graph.existsVertex(4) << "\n";
     cout << "\t\tV5 exists: " << graph.existsVertex(5) << "\n";
 
-    cout << "\n\n";
-
-    graph.showDFS(2);
-    cout << "\n";
-    graph.showBFS(2);
-
     cout << "\t\t\t\t\tV1 <-- E2-E1 --> V2\n"
             "\t\t\t\t\t | /\\            |\n"
             "\t\t\t\t\t |  \\            |\n"
@@ -78,10 +67,7 @@ int main() {
             "\t\t\t\t\t\\/            \\ \\/\n"
             "\t\t\t\t\tV4              V3\n\n";
 
-    graph.showDFS(2);
-    cout << "\n";
-    graph.showBFS(2);
-
     cout << "\n\t================================================================\n";
+
     return 0;
 }
