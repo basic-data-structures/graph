@@ -42,6 +42,8 @@ class Graph {
         // POST: Returns the cost of going from begin to end
         int getCost(Type begin, Type end);
 
+        // PRE: -
+        // POST: Prints matrix on screen
         void showMatrix();
 
         //  PRE: -
