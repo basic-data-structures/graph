@@ -36,9 +36,9 @@ int main() {
 
     cout << "\n\n";
 
-    graph->DFS(2);
+    graph->showDFS(2);
     cout << "\n";
-    graph->BFS(2);
+    graph->showBFS(2);
 
     cout << "\t\t\t\t\tV1 <-- E2-E1 --> V2\n"
             "\t\t\t\t\t | /\\            |\n"
