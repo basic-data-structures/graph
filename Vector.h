@@ -132,13 +132,11 @@ void Vector<Type>:: resize(unsigned newSize) {
     if (this->size != newSize) {
         Type* aux = data;
         data = new Type[newSize];
-        cout << "\tBEFORE -- Begin: " << 0 << "\tEnd: " << newSize << "\tSize: " << this->size << "\n";
         copyData(aux, 0, size);
         delete []aux;
         if (this->size < newSize)
             assignNull(this->size, newSize);
         this->size = newSize;
-        cout << "\tAFTER -- Begin: " << 0 << "\tEnd: " << newSize << "\tSize: " << this->size << "\n";
     }
 }
 
