@@ -27,13 +27,20 @@ int main() {
     for (int i = 0; i < vector.getVectorSize(); i++) {
         cout << "\t" << i << " -> " << vector.getElement(i) << "\n";
     }
+
+    vector.resize(17);
+    cout << "\n\tThe vector was resized! Now it can store up to " << vector.getVectorSize() << " elements\n";
+    for (int i = 0; i < vector.getVectorSize(); i++) {
+        cout << "\t" << i << " -> " << vector.getElement(i) << "\n";
+    }
 */
     cout << "\n\n\t========================= GRAPH ================================\n\n";
     int NULL_COST = -1;
     int NULL_TYPE = 0;
     Graph<int, int> graph( 1, 2, NULL_COST, 5, NULL_TYPE);
-    graph.addEdge(1,2,4);
+    //graph.addEdge(1,2,4);
     graph.addEdge(1,4,7);
+  /*
     graph.addEdge(2,1,3);
     graph.addEdge(2,3,14);
     graph.addEdge(5,6,7);
@@ -66,7 +73,7 @@ int main() {
             "\t\t\t\t\t |          \\    |\n"
             "\t\t\t\t\t\\/            \\ \\/\n"
             "\t\t\t\t\tV4              V3\n\n";
-
+*/
     cout << "\n\t================================================================\n";
 
     return 0;
