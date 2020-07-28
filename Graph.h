@@ -11,8 +11,8 @@ template <typename Type, typename Cost>
 class Graph {
 
     private:
-        Matrix<Cost>* costsMatrix;    // The matrix stores all the edges in the graph and their costs
-        List<Type>* vertices;         // The vector stores all the vertices in the graph
+        Matrix<Cost>* costsMatrix;
+        List<Type>* vertices;
         Cost nullCost;
         int elements;
 
