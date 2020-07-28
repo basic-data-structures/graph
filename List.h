@@ -19,6 +19,7 @@ class List {
 
         Type getData(int pos);
         bool existsData(Type key);
+        int getPosition(Type key);
         int getElements();
         void insertIn(Type key, int pos);
         void insertAtEnd(Type key);
@@ -46,6 +47,16 @@ template < typename Type >
 Type List<Type>:: getData(int pos) {
     return getNodeFrom(pos)->getData();
 }
+
+template < typename Type >
+int List<Type>:: getPosition(Type key) {
+    for (int i = 0; i < elements; i++) {
+        if (getData(i) == key)
+            return i;
+    }
+    cout << "\t" << key << "doesn't exist in the list!";
+}
+
 
 template < typename Type >
 bool List<Type>:: existsData(Type data) {
