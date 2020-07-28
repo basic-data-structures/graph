@@ -132,10 +132,13 @@ void Vector<Type>:: resize(unsigned newSize) {
     if (this->size != newSize) {
         Type* aux = data;
         data = new Type[newSize];
-        copyData(aux, 0, size);
-        delete []aux;
-        if (this->size < newSize)
+        if (this->size < newSize) {
+            copyData(aux, 0, size);
             assignNull(this->size, newSize);
+        }
+        else
+            copyData(aux, 0, newSize);
+        delete []aux;
         this->size = newSize;
     }
 }
