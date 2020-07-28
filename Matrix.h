@@ -99,7 +99,7 @@ void Matrix<Type>:: copyData(Type** matrix, unsigned int begin, unsigned int end
 template <typename Type>
 void Matrix<Type>:: printMatrix() {
     for (int i = 0; i < size; ++i) {
-        cout << "\t";
+        cout << "\t\t";
         for (int j = 0; j < size; ++j) {
             cout << matrix[i][j] << "\t";
         }
