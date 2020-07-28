@@ -1,7 +1,9 @@
 #ifndef GRAPHTEMPLATES_MATRIX_H
 #define GRAPHTEMPLATES_MATRIX_H
 
-#include "Vector.h"
+#include <iostream>
+
+using namespace std;
 
 template <typename Type>
 class Matrix {
