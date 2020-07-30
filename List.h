@@ -54,7 +54,6 @@ int List<Type>:: getPosition(Type key) {
         if (getData(i) == key)
             return i;
     }
-    cout << "\tThe key '" << key << "' doesn't exist in the list!\n";
 }
 
 
