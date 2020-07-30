@@ -11,10 +11,12 @@ class Matrix {
 private:
     Type** matrix;
     unsigned size;
-    Type null = null;
+    Type null;
 
 public:
+    Matrix();
     Matrix(unsigned size, Type null);
+    Matrix(const Matrix& matrix);
     ~Matrix();
     Type getData(unsigned row, unsigned col);
     void insert(Type data, unsigned row, unsigned col);
@@ -23,7 +25,34 @@ public:
     void assignNull(unsigned int beginRow, unsigned int endRow, unsigned int beginCol, unsigned int endCol);
     void copyData(Type** matrix, unsigned begin, unsigned end);
     void printMatrix();
+    Type operator()(unsigned int row, unsigned int col);
+    friend ostream& operator << (ostream& o, const Matrix<Type> &m);
 };
+
+template <typename Type>
+ostream& operator << (ostream& out, const Matrix<Type> &m) {
+    for (int i = 0; i < m.size; ++i) {
+        out << "\t\t";
+        for (int j = 0; j < m.size; ++j) {
+            out << m.getData(i, j) << "\t";
+        }
+        out << "\n";
+    }
+    out << "\n";
+    return out;
+}
+
+template <typename Type>
+Type Matrix<Type>:: operator()(unsigned int row, unsigned int col) {
+    return matrix[row][col];
+}
+
+template <typename Type>
+Matrix<Type>:: Matrix() {
+    matrix = 0;
+    size = 0;
+    null = 0;
+}
 
 template <typename Type>
 Matrix<Type>:: Matrix(unsigned size, Type null) {
@@ -33,6 +62,14 @@ Matrix<Type>:: Matrix(unsigned size, Type null) {
     this->size = size;
     this->null = null;
     assignNull(0, size, 0, size);
+}
+
+template <typename Type>
+Matrix<Type>:: Matrix(const Matrix<Type> &matrix) {
+    this->matrix = new Type*[matrix.size];
+    for (int i = 0; i < matrix.size; ++i)
+        matrix[i] = new Type[matrix.size];
+    copyData(matrix,0,0);
 }
 
 template <typename Type>
