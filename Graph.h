@@ -3,10 +3,6 @@
 
 #include "Matrix.h"
 #include "List.h"
-#include <limits>
-
-const int INFINITY = 9999999;
-const int NULL_COST = -1;
 
 template <typename Type, typename Cost>
 class Graph {
@@ -14,6 +10,7 @@ class Graph {
     private:
         Matrix<Cost>* costsMatrix;
         List<Type>* vertices;
+        Cost infinity;
         int elements;
 
     public:
@@ -24,7 +21,7 @@ class Graph {
 
         //  PRE: -
         // POST: Creates a graph with an edge connecting begin and end
-        Graph(Type begin, Type end, Cost cost);
+        Graph(Type begin, Type end, Cost cost, Cost infinity);
 
         //  PRE: -
         // POST: Free resources
@@ -44,14 +41,14 @@ class Graph {
 
         // PRE: -
         // POST: Returns the cost of going from begin to end
-        int getCost(Type begin, Type end);
+        Cost getCost(Type begin, Type end);
 
         // PRE: -
         // POST: Prints matrix on screen
         void showMatrix();
 
         //  PRE: -
-        // POST: Depth First Search all the vertices starting from the key given.
+        // POST: Depth First Search all the vertices of the graph starting from the key given.
         //       If the key doesn't exist in the graph, a message is printed on the screen.
         void showDFS(Type key);
 
@@ -64,8 +61,22 @@ class Graph {
 
 private:
 
-    int minDistanceIndex(int distances[], bool visited[]);
+    //  PRE: -
+    // POST: Returns the min cost from distances[]
+    Cost minDistance(Cost distances[], bool visited[]);
+
+    //  PRE: -
+    // POST: Prints on screen the min distances
+    void showMinDistances(Type begin, Cost distances[]);
+
+    //  PRE: -
+    // POST: Depth First Search all the vertices of the graph starting from begin.
+    //       If the key doesn't exist in the graph, a message is printed on the screen.
     void DFS(Type begin);
+
+    //  PRE: -
+    // POST: Breadth First Search all the vertices of the graph starting from begin.
+    //       If the key doesn't exist in the graph, a message is printed on the screen.
     void BFS(Type begin);
 };
 
@@ -75,13 +86,15 @@ Graph<Type, Cost>:: Graph() {
     costsMatrix = 0;
     vertices = 0;
     elements = 0;
+    infinity = 999999;
 }
 
 template<typename Type, typename Cost>
-Graph<Type, Cost>:: Graph(Type begin, Type end, Cost cost) {
+Graph<Type, Cost>:: Graph(Type begin, Type end, Cost cost, Cost infinity) {
     elements = 0;
+    this->infinity = infinity;
     vertices = new List<Type>;
-    costsMatrix = new Matrix<Cost>(elements, INFINITY);
+    costsMatrix = new Matrix<Cost>(elements, infinity);
     addEdge(begin, end, cost);
 }
 
@@ -92,8 +105,8 @@ Graph<Type, Cost>:: ~Graph() {
 }
 
 template<typename Type, typename Cost>
-int Graph<Type, Cost>:: getCost(Type begin, Type end) {
-    int cost = NULL;
+Cost Graph<Type, Cost>:: getCost(Type begin, Type end) {
+    Cost cost = infinity;
     if (existsEdge(begin, end)) {
         int begPos = vertices->getPosition(begin);
         int endPos = vertices->getPosition(end);
@@ -101,7 +114,6 @@ int Graph<Type, Cost>:: getCost(Type begin, Type end) {
     }
     return cost;
 }
-
 
 template<typename Type, typename Cost>
 void Graph<Type, Cost>:: showMatrix() {
@@ -150,7 +162,7 @@ template<typename Type, typename Cost>
 bool Graph<Type, Cost>:: existsEdge(Type begin, Type end) {
     bool exists = true;
     if (existsVertex(begin) && existsVertex(end)) {
-        if (costsMatrix->getData(vertices->getPosition(begin), vertices->getPosition(end)) == INFINITY)
+        if (costsMatrix->getData(vertices->getPosition(begin), vertices->getPosition(end)) == infinity)
             exists = false;
     }
     else
@@ -181,15 +193,23 @@ void Graph<Type, Cost>:: showBFS(Type key) {
 }
 
 template<typename Type, typename Cost>
-int Graph<Type, Cost>:: minDistanceIndex(int distances[], bool visited[]) {
-    int minCost = INFINITY, minIndex;
+Cost Graph<Type, Cost>:: minDistance(Cost distances[], bool visited[]) {
+    Cost minCost = infinity;
     for (int v = 0; v < vertices->getElements(); v++) {
-        if (visited[v] == false && distances[v] <= minCost) {
+        if (!visited[v] && distances[v] < minCost) {
             minCost = distances[v];
-            minIndex = v;
         }
     }
-    return minIndex;
+    return minCost;
+}
+
+template<typename Type, typename Cost>
+void Graph<Type, Cost>:: showMinDistances(Type begin, Cost distances[]) {
+    cout << "\n\t\t---- Min Distances from " << begin << "----\n"
+                                                         "\t\t Vertex\t\t\tDistance\n";
+    for (int j = 0; j < elements; ++j) {
+        cout << "\t\t\t" << vertices->getData(j) << "\t\t\t" << distances[j] << "\n";
+    }
 }
 
 template<typename Type, typename Cost>
@@ -197,35 +217,20 @@ void Graph<Type, Cost>:: dijkstra(Type begin) {
 
     if (existsVertex(begin)) {
 
-        int minDist, newCost, begPos = vertices->getPosition(begin), elements = vertices->getElements();
-        Type distances[elements];
+        int nearestPos, begPos = vertices->getPosition(begin), elements = vertices->getElements();
+        Cost nearest, newCost, distances[elements];
         bool visited[elements];
 
         for (int i = 0; i < elements; i++) {
-            distances[i] = INFINITY;
+            distances[i] = infinity;
             visited[i] = false;
         }
-
         distances[begPos] = 0;
+        visited[begPos] = true;
 
-        for (int i = 0; i < elements; i++) {
-            minDist = minDistanceIndex(distances, visited);
-            visited[vertices->getPosition(minDist)] = true;
+        //TODO
 
-            for (int v = 0; v < elements; v++) {
-                if (!visited[v] && costsMatrix->getData(minDist, v) != INFINITY && distances[minDist] != INFINITY) {
-                    newCost =  costsMatrix->getData(minDist, v) + distances[minDist];
-                    if(newCost < distances[v])
-                        distances[v] = newCost;
-                }
-
-            }
-        }
-        cout << "\n\t\t---- Min Distances from " << begin << "----\n"
-                "\t\t Vertex\t\t\tDistance\n";
-        for (int j = 0; j < elements; ++j) {
-            cout << "\t\t\t" << vertices->getData(j) << "\t\t\t" << distances[j] << "\n";
-        }
+        showMinDistances(begin, distances);
     }
 }
 
