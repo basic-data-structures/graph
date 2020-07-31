@@ -79,7 +79,10 @@ Matrix<Type>:: ~Matrix() {
 
 template <typename Type>
 Type Matrix<Type>:: getData(unsigned row, unsigned col) {
-    return matrix[row][col];
+    if (row < size && col < size)
+        return matrix[row][col];
+    else
+        return null;
 }
 
 template <typename Type>
