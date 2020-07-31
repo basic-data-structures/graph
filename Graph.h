@@ -57,6 +57,9 @@ class Graph {
         //       If the key doesn't exist in the graph, a message is printed on the screen.
         void showBFS(Type key);
 
+        //  PRE: -
+        // POST: Finds the shortest paths from begin to every vertex in the graph, then calls
+        //       showMinDistances to print the results on the screen.
         void dijkstra(Type begin);
 
 private:
@@ -120,7 +123,6 @@ void Graph<Type, Cost>:: showMatrix() {
     cout << "\n";
     costsMatrix->printMatrix();
 }
-
 
 template<typename Type, typename Cost>
 void Graph<Type, Cost>:: addEdge(Type begin, Type end, Cost cost) {
@@ -193,6 +195,30 @@ void Graph<Type, Cost>:: showBFS(Type key) {
 }
 
 template<typename Type, typename Cost>
+void Graph<Type, Cost>:: dijkstra(Type begin) {
+
+    if (existsVertex(begin)) {
+
+        int nearestPos, begPos = vertices->getPosition(begin), elements = vertices->getElements();
+        Cost nearest, newCost, distances[elements];
+        bool visited[elements];
+
+        for (int i = 0; i < elements; i++) {
+            distances[i] = infinity;
+            visited[i] = false;
+        }
+        distances[begPos] = 0;
+        visited[begPos] = true;
+
+        //TODO
+
+        showMinDistances(begin, distances);
+    }
+}
+
+
+
+template<typename Type, typename Cost>
 Cost Graph<Type, Cost>:: minDistance(Cost distances[], bool visited[]) {
     Cost minCost = infinity;
     for (int v = 0; v < vertices->getElements(); v++) {
@@ -213,25 +239,13 @@ void Graph<Type, Cost>:: showMinDistances(Type begin, Cost distances[]) {
 }
 
 template<typename Type, typename Cost>
-void Graph<Type, Cost>:: dijkstra(Type begin) {
+void Graph<Type, Cost>:: DFS(Type begin) {
+    // TODO
+}
 
-    if (existsVertex(begin)) {
-
-        int nearestPos, begPos = vertices->getPosition(begin), elements = vertices->getElements();
-        Cost nearest, newCost, distances[elements];
-        bool visited[elements];
-
-        for (int i = 0; i < elements; i++) {
-            distances[i] = infinity;
-            visited[i] = false;
-        }
-        distances[begPos] = 0;
-        visited[begPos] = true;
-
-        //TODO
-
-        showMinDistances(begin, distances);
-    }
+template<typename Type, typename Cost>
+void Graph<Type, Cost>:: BFS(Type begin) {
+    // TODO
 }
 
 #endif //GRAPHTEMPLATES_GRAPH_H

@@ -29,6 +29,7 @@ public:
     friend ostream& operator << (ostream& o, const Matrix<Type> &m);
 };
 
+///////////////////////////////////////////// IMPLEMENTATION /////////////////////////////////////////////
 template <typename Type>
 ostream& operator << (ostream& out, const Matrix<Type> &m) {
     for (int i = 0; i < m.size; ++i) {
