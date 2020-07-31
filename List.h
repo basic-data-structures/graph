@@ -50,10 +50,13 @@ Type List<Type>:: getData(int pos) {
 
 template < typename Type >
 int List<Type>:: getPosition(Type key) {
-    for (int i = 0; i < elements; i++) {
-        if (getData(i) == key)
-            return i;
+    int i = 0, pos = -1;
+    while (i < elements && getData(i) != key) {
+        i ++;
     }
+    if (getData(i) == key)
+        pos = i;
+    return pos;
 }
 
 
