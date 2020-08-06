@@ -19,6 +19,7 @@ class List {
 
         Type getData(int pos);
         bool existsData(Type key);
+        int getPosition(Type key);
         int getElements();
         void insertIn(Type key, int pos);
         void insertAtEnd(Type key);
@@ -48,13 +49,24 @@ Type List<Type>:: getData(int pos) {
 }
 
 template < typename Type >
+int List<Type>:: getPosition(Type key) {
+    int i = 0, pos = -1;
+    while (i < elements && getData(i) != key) {
+        i ++;
+    }
+    if (getData(i) == key)
+        pos = i;
+    return pos;
+}
+
+
+template < typename Type >
 bool List<Type>:: existsData(Type data) {
     bool found = false;
     int i = 0;
-    while((i < elements) && !found) {
-        if(data == getData(i)) {
-        found = true;
-        }
+    while (i < elements && found == false) {
+        if (data == getData(i))
+            found = true;
         i++;
     }
     return found;
