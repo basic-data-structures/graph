@@ -7,9 +7,10 @@ int main() {
 
     cout << "\n\n\t========================= GRAPH ================================\n\n";
     int INFINITY = 999999;
-    Graph<int, int> graph( 1, 2, 5, INFINITY);
+    int INT_NULL = -1;
+    Graph<int, int> graph( 1, 2, 5, INT_NULL, INFINITY);
 
-    cout << "\n\n";
+    cout << "\n";
     graph.showMatrix();
     graph.addEdge(1,2,4);
     graph.addEdge(3,1,7);
@@ -27,7 +28,7 @@ int main() {
     cout << "\t\tV2 to V1: " << graph.existsEdge(2,1) << " - Cost: " << graph.getCost(2,1) << "\n";
     cout << "\t\tV2 to V3: " << graph.existsEdge(2,3) << " - Cost: " << graph.getCost(2,3) << "\n";
     cout << "\t\tV3 to V5: " << graph.existsEdge(3,5) << " - Cost: " << graph.getCost(3,5) << "\n";
-    cout << "\t\tV1 to V3: " << graph.existsEdge(1,3) << " - Cost: " << graph.getCost(1,3) << "\n\n\n";
+    cout << "\t\tV1 to V3: " << graph.existsEdge(1,3) << " - Cost: " << graph.getCost(1,3) << "\n\n";
 
     cout << "\t\tV0 = 0 exists: " << graph.existsVertex(0) << "\n";
     cout << "\t\tV1 = 1 exists: " << graph.existsVertex(1) << "\n";
@@ -36,9 +37,8 @@ int main() {
     cout << "\t\tV4 = 4 exists: " << graph.existsVertex(4) << "\n";
     cout << "\t\tV5 = 5 exists: " << graph.existsVertex(5) << "\n";
     cout << "\t\tV6 = 6 exists: " << graph.existsVertex(6) << "\n";
-    cout << "\t\tV7 = 7 exists: " << graph.existsVertex(7) << "\n";
+    cout << "\t\tV7 = 7 exists: " << graph.existsVertex(7) << "\n\n";
 
-    cout << "\n\n";
     graph.showMatrix();
 
     cout << "\n\t\t\t\t\tV1 <-----------> V2\n"
@@ -59,12 +59,7 @@ int main() {
             "\t\t\t\t\t\\/ \\/            |\n"
             "\t\t\t\t\tV5              V6\n\n";
 
-    graph.dijkstra(1);/*
-    graph.dijkstra(2);
-    graph.dijkstra(3);
-    graph.dijkstra(4);
-    graph.dijkstra(5);
-    graph.dijkstra(6);*/
+    graph.shortestPath(1,6);
 
     cout << "\n\t================================================================\n";
 

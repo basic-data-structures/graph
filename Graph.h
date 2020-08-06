@@ -10,6 +10,7 @@ class Graph {
     private:
         Matrix<Cost>* costsMatrix;
         List<Type>* vertices;
+        Type null;
         Cost infinity;
         int elements;
 
@@ -21,7 +22,7 @@ class Graph {
 
         //  PRE: -
         // POST: Creates a graph with an edge connecting begin and end
-        Graph(Type begin, Type end, Cost cost, Cost infinity);
+        Graph(Type begin, Type end, Cost cost, Type null, Cost infinity);
 
         //  PRE: -
         // POST: Free resources
@@ -60,17 +61,17 @@ class Graph {
         //  PRE: -
         // POST: Finds the shortest paths from begin to every vertex in the graph, then calls
         //       showMinDistances to print the results on the screen.
-        void dijkstra(Type begin);
+        void shortestPath(Type begin, Type end);
 
 private:
 
     //  PRE: -
-    // POST: Returns the min cost from distances[]
-    Cost minDistance(Cost distances[], bool visited[]);
+    // POST: Returns the matrix with the min weight from every origin node to every destination node
+    Matrix<Cost>* minWeight();
 
     //  PRE: -
-    // POST: Prints on screen the min distances
-    void showMinDistances(Type begin, Cost distances[]);
+    // POST: Returns the matrix with the min weight from every origin node to every destination node
+    Matrix<Type>* minPath();
 
     //  PRE: -
     // POST: Depth First Search all the vertices of the graph starting from begin.
@@ -89,13 +90,15 @@ Graph<Type, Cost>:: Graph() {
     costsMatrix = 0;
     vertices = 0;
     elements = 0;
+    null = 0;
     infinity = 999999;
 }
 
 template<typename Type, typename Cost>
-Graph<Type, Cost>:: Graph(Type begin, Type end, Cost cost, Cost infinity) {
+Graph<Type, Cost>:: Graph(Type begin, Type end, Cost cost, Type null, Cost infinity) {
     elements = 0;
     this->infinity = infinity;
+    this->null = null;
     vertices = new List<Type>;
     costsMatrix = new Matrix<Cost>(elements, infinity);
     addEdge(begin, end, cost);
@@ -162,13 +165,11 @@ bool Graph<Type, Cost>:: existsVertex(Type key) {
 
 template<typename Type, typename Cost>
 bool Graph<Type, Cost>:: existsEdge(Type begin, Type end) {
-    bool exists = true;
+    bool exists = false;
     if (existsVertex(begin) && existsVertex(end)) {
-        if (costsMatrix->getData(vertices->getPosition(begin), vertices->getPosition(end)) == infinity)
-            exists = false;
+        if (costsMatrix->getData(vertices->getPosition(begin), vertices->getPosition(end)) < infinity)
+            exists = true;
     }
-    else
-        exists = false;
     return exists;
 }
 
@@ -195,47 +196,57 @@ void Graph<Type, Cost>:: showBFS(Type key) {
 }
 
 template<typename Type, typename Cost>
-void Graph<Type, Cost>:: dijkstra(Type begin) {
+void Graph<Type, Cost>::shortestPath(Type begin, Type end) {
 
-    if (existsVertex(begin)) {
+    if (existsVertex(begin) && existsVertex(end)) {
 
-        int nearestPos, begPos = vertices->getPosition(begin), elements = vertices->getElements();
-        Cost nearest, newCost, distances[elements];
-        bool visited[elements];
+        Matrix<Cost>* minWeights = minWeight();
+        Matrix<Type>* minPaths = minPath();
+        int begPos = vertices->getPosition(begin);
+        int endPos = vertices->getPosition(end);
 
+        cout << "\tThe shortest path from " << begin << " to " << end << " weights " << minWeights->getData(begPos, endPos) << "\n";
+        int i = 1;
+        while (minPaths->getData(begPos, endPos) != end) {
+            cout << "\t" << i << ". " << minPaths->getData(begPos, endPos);
+            begPos = vertices->getPosition(minPaths->getData(begPos, endPos));
+            i++;
+        }
+
+        delete minWeights;
+        delete minPaths;
+    }
+
+}
+
+template<typename Type, typename Cost>
+Matrix<Cost>* Graph<Type, Cost>::minWeight() {
+    Matrix<Cost>* weights = new Matrix<Cost>(infinity, elements, elements);
+    for(int k = 0; k < elements; k++) {
         for (int i = 0; i < elements; i++) {
-            distances[i] = infinity;
-            visited[i] = false;
-        }
-        distances[begPos] = 0;
-        visited[begPos] = true;
-
-        //TODO
-
-        showMinDistances(begin, distances);
-    }
-}
-
-
-
-template<typename Type, typename Cost>
-Cost Graph<Type, Cost>:: minDistance(Cost distances[], bool visited[]) {
-    Cost minCost = infinity;
-    for (int v = 0; v < vertices->getElements(); v++) {
-        if (!visited[v] && distances[v] < minCost) {
-            minCost = distances[v];
+            for (int j = 0; j < elements; j++) {
+                if (i != j && weights->getData(i, k) + weights->getData(k, j) < weights->getData(i, j)) {
+                    weights->insert(weights->getData(i, k) + weights->getData(k, j), i, j);
+                }
+            }
         }
     }
-    return minCost;
+    return weights;
 }
 
 template<typename Type, typename Cost>
-void Graph<Type, Cost>:: showMinDistances(Type begin, Cost distances[]) {
-    cout << "\n\t\t---- Min Distances from " << begin << "----\n"
-                                                         "\t\t Vertex\t\t\tDistance\n";
-    for (int j = 0; j < elements; ++j) {
-        cout << "\t\t\t" << vertices->getData(j) << "\t\t\t" << distances[j] << "\n";
+Matrix<Type>* Graph<Type, Cost>::minPath() {
+    Matrix<Type>* paths = new Matrix<Type>(null, elements, elements);
+    for(int k = 0; k < elements; k++) {
+        for (int i = 0; i < elements; i++) {
+            for (int j = 0; j < elements; j++) {
+                if (i != j && paths->getData(i, k) + paths->getData(k, j) < paths->getData(i, j)) {
+                    paths->insert(vertices->getData(k), i, j);
+                }
+            }
+        }
     }
+    return paths;
 }
 
 template<typename Type, typename Cost>
