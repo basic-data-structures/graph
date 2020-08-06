@@ -221,7 +221,7 @@ void Graph<Type, Cost>::shortestPath(Type begin, Type end) {
 
 template<typename Type, typename Cost>
 Matrix<Cost>* Graph<Type, Cost>::minWeight() {
-    Matrix<Cost>* weights = new Matrix<Cost>(infinity, elements, elements);
+    Matrix<Cost>* weights = new Matrix<Cost>(infinity, elements);
     for(int k = 0; k < elements; k++) {
         for (int i = 0; i < elements; i++) {
             for (int j = 0; j < elements; j++) {
@@ -236,7 +236,7 @@ Matrix<Cost>* Graph<Type, Cost>::minWeight() {
 
 template<typename Type, typename Cost>
 Matrix<Type>* Graph<Type, Cost>::minPath() {
-    Matrix<Type>* paths = new Matrix<Type>(null, elements, elements);
+    Matrix<Type>* paths = new Matrix<Type>(null, elements);
     for(int k = 0; k < elements; k++) {
         for (int i = 0; i < elements; i++) {
             for (int j = 0; j < elements; j++) {
