@@ -15,17 +15,18 @@ private:
 
 public:
     Matrix();
-    Matrix(unsigned squareSize, Type null);
-    Matrix(unsigned rows, unsigned cols, Type null);
+    Matrix(unsigned int squareSize, Type null);
+    Matrix(unsigned int rows, unsigned int cols, Type null);
     Matrix(const Matrix& matrix);
     ~Matrix();
-    Type getData(unsigned row, unsigned col);
-    unsigned getRows();
-    unsigned getCols();
+    Type getData(unsigned int row, unsigned int col);
+    unsigned int getRows();
+    unsigned int getCols();
     Type getNull();
     void setNull(Type null);
-    void insert(Type data, unsigned row, unsigned col);
+    void insert(Type data, unsigned int row, unsigned int col);
     void freeMatrixResources(Type** matrix);
+    void resize(unsigned int size);
     void resize(unsigned int rows, unsigned int cols);
     void assignNull(unsigned int beginRow, unsigned int endRow, unsigned int beginCol, unsigned int endCol);
     void copyData(Type** matrix, unsigned int beginRow, unsigned int endRow, unsigned int beginCol, unsigned int endCol);
@@ -72,7 +73,7 @@ Matrix<Type>:: Matrix() {
 }
 
 template <typename Type>
-Matrix<Type>:: Matrix(unsigned size, Type null) {
+Matrix<Type>:: Matrix(unsigned int size, Type null) {
     matrix = new Type*[size];
     for (int i = 0; i < size; ++i)
         matrix[i] = new Type[size];
@@ -83,7 +84,7 @@ Matrix<Type>:: Matrix(unsigned size, Type null) {
 }
 
 template <typename Type>
-Matrix<Type>:: Matrix(unsigned rows, unsigned cols, Type null) {
+Matrix<Type>:: Matrix(unsigned int rows, unsigned int cols, Type null) {
     matrix = new Type*[rows];
     for (int i = 0; i < rows; ++i)
         matrix[i] = new Type[cols];
@@ -107,7 +108,7 @@ Matrix<Type>:: ~Matrix() {
 }
 
 template <typename Type>
-Type Matrix<Type>:: getData(unsigned row, unsigned col) {
+Type Matrix<Type>:: getData(unsigned int row, unsigned int col) {
     if (row < rows && col < cols)
         return matrix[row][col];
     else
@@ -145,6 +146,11 @@ void Matrix<Type>:: freeMatrixResources(Type** matrix) {
         delete[] matrix[i];
     }
     delete[] matrix;
+}
+
+template <typename Type>
+void Matrix<Type>:: resize(unsigned int size) {
+    this->resize(size, size);
 }
 
 template <typename Type>
