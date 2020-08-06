@@ -149,8 +149,8 @@ void Graph<Type, Cost>:: addEdge(Type begin, Type end, Cost cost) {
             costsMatrix->resize(elements + 2);
             vertices->insertAtEnd(begin);
             vertices->insertAtEnd(end);
-            elements += 2;
             costsMatrix->insert(cost, vertices->getPosition(begin), vertices->getPosition(end));
+            elements += 2;
         }
         cout << "\t\tEdge connecting " << begin << " and " << end << " with cost " << cost << " added successfully!\n";
     }
@@ -204,29 +204,68 @@ void Graph<Type, Cost>::shortestPath(Type begin, Type end) {
         Matrix<Type>* minPaths = minPath();
         int begPos = vertices->getPosition(begin);
         int endPos = vertices->getPosition(end);
+        int minCost = minWeights->getData(begPos, endPos);
 
-        cout << "\tThe shortest path from " << begin << " to " << end << " weights " << minWeights->getData(begPos, endPos) << "\n";
-        int i = 1;
-        while (minPaths->getData(begPos, endPos) != end) {
-            cout << "\t" << i << ". " << minPaths->getData(begPos, endPos);
-            begPos = vertices->getPosition(minPaths->getData(begPos, endPos));
-            i++;
+
+        cout << "\t------------ COSTS -------------\n";
+        for (int i = 0; i < elements; ++i) {
+            for (int j = 0; j < elements; ++j) {
+                cout << "\t" << costsMatrix->getData(i,j);
+            }
+            cout << "\n";
         }
+
+        cout << "\t------------ WEIGHTS -------------\n";
+        for (int i = 0; i < elements; ++i) {
+            for (int j = 0; j < elements; ++j) {
+                cout << "\t" << minWeights->getData(i,j);
+            }
+            cout << "\n";
+        }
+
+        cout << "\t------------- PATHS --------------\n";
+        for (int i = 0; i < elements; ++i) {
+            for (int j = 0; j < elements; ++j) {
+                cout << "\t" << minPaths->getData(i,j);
+            }
+            cout << "\n";
+        }
+
+
+        if (minCost < infinity) {
+            cout << "\tThe shortest path from " << begin << " to " << end << " weights " << minCost << "\n";
+            int i = 1;
+            //while (minPaths->getData(begPos, endPos) != end) {
+                cout << "\t" << i << ". " << minPaths->getData(begPos, endPos);
+                begPos = vertices->getPosition(minPaths->getData(begPos, endPos));
+                i++;
+           // }
+        }
+        else
+            cout << "\tThere's no path from " << begin << " to " << end << "\n";
 
         delete minWeights;
         delete minPaths;
     }
-
+    else
+        cout << "\tOrigin or destination vertex doesn't exist\n";
 }
 
 template<typename Type, typename Cost>
 Matrix<Cost>* Graph<Type, Cost>::minWeight() {
-    Matrix<Cost>* weights = new Matrix<Cost>(infinity, elements);
+    Matrix<Cost>* weights = new Matrix<Cost>(elements, infinity);
+    for (int i = 0; i < elements; ++i) {
+        for (int j = 0; j < elements; ++j) {
+            if (i != j)
+                weights->insert(costsMatrix->getData(i,j), i, j);
+        }
+    }
     for(int k = 0; k < elements; k++) {
         for (int i = 0; i < elements; i++) {
             for (int j = 0; j < elements; j++) {
-                if (i != j && weights->getData(i, k) + weights->getData(k, j) < weights->getData(i, j)) {
-                    weights->insert(weights->getData(i, k) + weights->getData(k, j), i, j);
+                Cost distance = weights->getData(i, k) + weights->getData(k, j);
+                if (i != j && distance < weights->getData(i, j)) {
+                    weights->insert(distance, i, j);
                 }
             }
         }
@@ -236,7 +275,14 @@ Matrix<Cost>* Graph<Type, Cost>::minWeight() {
 
 template<typename Type, typename Cost>
 Matrix<Type>* Graph<Type, Cost>::minPath() {
-    Matrix<Type>* paths = new Matrix<Type>(null, elements);
+    Matrix<Type>* paths = new Matrix<Type>(elements, null);
+    for (int i = 0; i < elements; ++i) {
+        for (int j = 0; j < elements; ++j) {
+            if (i != j)
+                paths->insert(vertices->getData(j), i, j);
+        }
+    }
+
     for(int k = 0; k < elements; k++) {
         for (int i = 0; i < elements; i++) {
             for (int j = 0; j < elements; j++) {

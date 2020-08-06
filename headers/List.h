@@ -64,10 +64,9 @@ template < typename Type >
 bool List<Type>:: existsData(Type data) {
     bool found = false;
     int i = 0;
-    while((i < elements) && !found) {
-        if(data == getData(i)) {
-        found = true;
-        }
+    while (i < elements && found == false) {
+        if (data == getData(i))
+            found = true;
         i++;
     }
     return found;
