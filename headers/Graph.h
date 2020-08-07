@@ -3,6 +3,7 @@
 
 #include "Matrix.h"
 #include "List.h"
+#include "Queue.h"
 
 template <typename Type, typename Cost>
 struct ShortestPath{
@@ -273,7 +274,29 @@ void Graph<Type, Cost>:: DFS(Type begin, bool visited[]) {
 
 template<typename Type, typename Cost>
 void Graph<Type, Cost>:: BFS(Type begin) {
-    // TODO
+
+    Queue<int> queue;
+    bool visited[elements];
+    Type current;
+    int currentPos = vertices->getPosition(begin);
+
+    for (int i = 0; i < elements; ++i)
+        visited[i] = false;
+    queue.enqueue(currentPos);
+    visited[currentPos] = true;
+
+    while (!queue.empty()) {
+        currentPos = queue.peek();
+        current = vertices->getData(currentPos);
+        cout << "\t" << current;
+        queue.dequeue();
+        for (int i = 0; i < elements; ++i) {
+            if (costsMatrix->getData(currentPos, i) != infinity && !visited[i]) {
+                queue.enqueue(i);
+                visited[i] = true;
+            }
+        }
+    }
 }
 
 #endif //GRAPHTEMPLATES_GRAPH_H

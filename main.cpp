@@ -67,7 +67,18 @@ int main() {
     graph.showShortestPath(V1,V6);
 
     graph.showDFS(V1);
+    graph.showDFS(V2);
+    graph.showDFS(V3);
+    graph.showDFS(V4);
+    graph.showDFS(V5);
     graph.showDFS(V6);
+
+    graph.showBFS(V1);
+    graph.showBFS(V2);
+    graph.showBFS(V3);
+    graph.showBFS(V4);
+    graph.showBFS(V5);
+    graph.showBFS(V6);
 
     cout << "\n\t================================================================\n";
 
