@@ -78,7 +78,7 @@ private:
     //  PRE: -
     // POST: Depth First Search all the vertices of the graph starting from begin.
     //       If the key doesn't exist in the graph, a message is printed on the screen.
-    void DFS(Type begin);
+    void DFS(Type begin, bool visited[]);
 
     //  PRE: -
     // POST: Breadth First Search all the vertices of the graph starting from begin.
@@ -180,7 +180,10 @@ void Graph<Type, Cost>:: showDFS(Type key) {
     cout << "\t---------------------------- DFS -------------------------------\n";
     if (existsVertex(key)) {
         cout << "\t\tStarting DFS from " << key << "...\n\t";
-        DFS(key);
+        bool visited[elements];
+        for (int i = 0; i < elements; ++i)
+            visited[i] = false;
+        DFS(key, visited);
     } else
         cout << "\tOps! That value doesn't exist in the graph. Try again!\n";
     cout << "\n\t----------------------------------------------------------------\n\n";
@@ -258,8 +261,14 @@ ShortestPath<Type, Cost> Graph<Type, Cost>::findShortestPath() {
 }
 
 template<typename Type, typename Cost>
-void Graph<Type, Cost>:: DFS(Type begin) {
-    // TODO
+void Graph<Type, Cost>:: DFS(Type begin, bool visited[]) {
+    int begPos = vertices->getPosition(begin);
+    visited[begPos] = true;
+    cout << "\t" << begin;
+    for (int i = 0; i < elements; ++i) {
+        if (costsMatrix->getData(begPos, i) != infinity && !visited[i])
+            DFS(vertices->getData(i), visited);
+    }
 }
 
 template<typename Type, typename Cost>

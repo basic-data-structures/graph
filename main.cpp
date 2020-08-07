@@ -66,6 +66,9 @@ int main() {
     graph.showShortestPath(V6,V4);
     graph.showShortestPath(V1,V6);
 
+    graph.showDFS(V1);
+    graph.showDFS(V6);
+
     cout << "\n\t================================================================\n";
 
     return 0;
