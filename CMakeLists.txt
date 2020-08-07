@@ -8,7 +8,5 @@ add_executable(graphTemplates main.cpp
         headers/Node.h
         headers/Graph.h
         headers/Matrix.h
-        headers/PriorityNode.h
-        headers/PriorityQueue.h
         headers/Queue.h
-        headers/Stack.h)
+        )
