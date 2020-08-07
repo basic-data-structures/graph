@@ -13,7 +13,6 @@ int main() {
     Graph<string, int> graph( V1, V2, 5, STR_NULL, INFINITY);
 
     cout << "\n";
-    graph.showMatrix();
     graph.addEdge(V1,V2,4);
     graph.addEdge(V3,V1,7);
     graph.addEdge(V2,V1,3);
@@ -22,7 +21,6 @@ int main() {
     graph.addEdge(V4,V5,7);
     graph.addEdge(V6,V3,2);
     graph.addEdge(V3,V5,11);
-    graph.showMatrix();
 
     cout << boolalpha;
     cout << "\n\n\t\tV1 to V2: " << graph.existsEdge(V1,V2) << " - Cost: " << graph.getCost(V1,V2) << "\n";
@@ -40,8 +38,6 @@ int main() {
     cout << "\t\tV5 = 5 exists: " << graph.existsVertex(V5) << "\n";
     cout << "\t\tV6 = 6 exists: " << graph.existsVertex(V6) << "\n";
     cout << "\t\tV7 = 7 exists: " << graph.existsVertex(V7) << "\n\n";
-
-    graph.showMatrix();
 
     cout << "\n\t\t\t\t\tV1 <-----------> V2\n"
             "\t\t\t\t\t | /\\            |\n"
