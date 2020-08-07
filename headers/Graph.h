@@ -5,6 +5,12 @@
 #include "List.h"
 
 template <typename Type, typename Cost>
+struct ShortestPath{
+    Matrix<Cost>* weights;
+    Matrix<Type>* paths;
+};
+
+template <typename Type, typename Cost>
 class Graph {
 
     private:
@@ -61,17 +67,13 @@ class Graph {
         //  PRE: -
         // POST: Finds the shortest paths from begin to every vertex in the graph, then calls
         //       showMinDistances to print the results on the screen.
-        void shortestPath(Type begin, Type end);
+        void showShortestPath(Type begin, Type end);
 
 private:
 
     //  PRE: -
     // POST: Returns the matrix with the min weight from every origin node to every destination node
-    Matrix<Cost>* minWeight();
-
-    //  PRE: -
-    // POST: Returns the matrix with the min weight from every origin node to every destination node
-    Matrix<Type>* minPath();
+    ShortestPath<Type, Cost> findShortestPath();
 
     //  PRE: -
     // POST: Depth First Search all the vertices of the graph starting from begin.
@@ -196,103 +198,63 @@ void Graph<Type, Cost>:: showBFS(Type key) {
 }
 
 template<typename Type, typename Cost>
-void Graph<Type, Cost>::shortestPath(Type begin, Type end) {
+void Graph<Type, Cost>:: showShortestPath(Type begin, Type end) {
 
     if (existsVertex(begin) && existsVertex(end)) {
 
-        Matrix<Cost>* minWeights = minWeight();
-        Matrix<Type>* minPaths = minPath();
-        int begPos = vertices->getPosition(begin);
-        int endPos = vertices->getPosition(end);
-        int minCost = minWeights->getData(begPos, endPos);
-
-
-        cout << "\t------------ COSTS -------------\n";
-        for (int i = 0; i < elements; ++i) {
-            for (int j = 0; j < elements; ++j) {
-                cout << "\t" << costsMatrix->getData(i,j);
-            }
-            cout << "\n";
-        }
-
-        cout << "\t------------ WEIGHTS -------------\n";
-        for (int i = 0; i < elements; ++i) {
-            for (int j = 0; j < elements; ++j) {
-                cout << "\t" << minWeights->getData(i,j);
-            }
-            cout << "\n";
-        }
-
-        cout << "\t------------- PATHS --------------\n";
-        for (int i = 0; i < elements; ++i) {
-            for (int j = 0; j < elements; ++j) {
-                cout << "\t" << minPaths->getData(i,j);
-            }
-            cout << "\n";
-        }
-
+        ShortestPath<Type, Cost> shortestPath = findShortestPath();
+        int begPos = vertices->getPosition(begin), endPos = vertices->getPosition(end);
+        int minCost = shortestPath.weights->getData(begPos, endPos), i = 1;
 
         if (minCost < infinity) {
-            cout << "\tThe shortest path from " << begin << " to " << end << " weights " << minCost << "\n";
-            int i = 1;
-            //while (minPaths->getData(begPos, endPos) != end) {
-                cout << "\t" << i << ". " << minPaths->getData(begPos, endPos);
-                begPos = vertices->getPosition(minPaths->getData(begPos, endPos));
+            cout << "\n\n\tThe shortest path from " << begin << " to " << end << " weights " << minCost;
+            if (shortestPath.paths->getData(begPos, endPos) != end)
+                cout << "\n\t  To get there, you'll need to go through:";
+            else
+                cout << "\n\t  There are no connections needed!";
+            while (shortestPath.paths->getData(begPos, endPos) != end) {
+                cout << "\n\t\t" << i << ". " << shortestPath.paths->getData(begPos, endPos);
+                begPos = vertices->getPosition(shortestPath.paths->getData(begPos, endPos));
                 i++;
-           // }
+            }
         }
         else
-            cout << "\tThere's no path from " << begin << " to " << end << "\n";
+            cout << "\n\tThere's no path from " << begin << " to " << end << "\n";
 
-        delete minWeights;
-        delete minPaths;
+        delete shortestPath.paths;
+        delete shortestPath.weights;
     }
     else
         cout << "\tOrigin or destination vertex doesn't exist\n";
 }
 
 template<typename Type, typename Cost>
-Matrix<Cost>* Graph<Type, Cost>::minWeight() {
-    Matrix<Cost>* weights = new Matrix<Cost>(elements, infinity);
-    for (int i = 0; i < elements; ++i) {
-        for (int j = 0; j < elements; ++j) {
-            if (i != j)
-                weights->insert(costsMatrix->getData(i,j), i, j);
-        }
-    }
-    for(int k = 0; k < elements; k++) {
-        for (int i = 0; i < elements; i++) {
-            for (int j = 0; j < elements; j++) {
-                Cost distance = weights->getData(i, k) + weights->getData(k, j);
-                if (i != j && distance < weights->getData(i, j)) {
-                    weights->insert(distance, i, j);
-                }
-            }
-        }
-    }
-    return weights;
-}
+ShortestPath<Type, Cost> Graph<Type, Cost>::findShortestPath() {
+    ShortestPath<Type, Cost> shortestPath;
+    shortestPath.weights = new Matrix<Cost>(elements, infinity);
+    shortestPath.paths = new Matrix<Type>(elements, null);
 
-template<typename Type, typename Cost>
-Matrix<Type>* Graph<Type, Cost>::minPath() {
-    Matrix<Type>* paths = new Matrix<Type>(elements, null);
     for (int i = 0; i < elements; ++i) {
         for (int j = 0; j < elements; ++j) {
-            if (i != j)
-                paths->insert(vertices->getData(j), i, j);
+            if (i != j) {
+                shortestPath.weights->insert(costsMatrix->getData(i, j), i, j);
+                shortestPath.paths->insert(vertices->getData(j), i, j);
+            }
         }
     }
 
     for(int k = 0; k < elements; k++) {
         for (int i = 0; i < elements; i++) {
             for (int j = 0; j < elements; j++) {
-                if (i != j && paths->getData(i, k) + paths->getData(k, j) < paths->getData(i, j)) {
-                    paths->insert(vertices->getData(k), i, j);
+                Cost distance = shortestPath.weights->getData(i, k) + shortestPath.weights->getData(k, j);
+                if (i != j && distance < shortestPath.weights->getData(i, j)) {
+                    shortestPath.weights->insert(distance, i, j);
+                    shortestPath.paths->insert(vertices->getData(k), i, j);
                 }
             }
         }
     }
-    return paths;
+    return shortestPath;
 }
 
 template<typename Type, typename Cost>

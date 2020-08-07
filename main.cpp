@@ -59,10 +59,12 @@ int main() {
             "\t\t\t\t\t |     /         |\n"
             "\t\t\t\t\t |   /           |\n"
             "\t\t\t\t\t\\/ \\/            |\n"
-            "\t\t\t\t\tV5              V6\n\n";
+            "\t\t\t\t\tV5              V6\n";
 
-    graph.shortestPath(V1,V2);
-    //graph.shortestPath(V1,V6);
+    graph.showShortestPath(V1,V2);
+    graph.showShortestPath(V1,V5);
+    graph.showShortestPath(V6,V4);
+    graph.showShortestPath(V1,V6);
 
     cout << "\n\t================================================================\n";
 
